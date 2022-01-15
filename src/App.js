@@ -8,7 +8,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Leagues />}>
           <Route path=":league" element={<League />} >
-            <Route path="/trades" element={<Trades />} >
+            <Route path="trades" element={<Trades />} >
               <Route path=":trade" element={<Trade />} />
             </Route>
           </Route>
