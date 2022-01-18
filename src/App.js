@@ -7,6 +7,7 @@ import Leagues from './pages/Leagues';
 import Trades from './pages/Trades';
 import Trade from './pages/Trade';
 import NoMatch from './pages/NoMatch';
+import Callback from './pages/Callback'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path=":trade" element={<Trade />} />
             </Route>
           </Route>
+          <Route path="callback" element={<Callback />} />
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>

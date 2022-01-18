@@ -11,15 +11,36 @@ const SessionContextProvider = ({children}) => {
     const setLoggedIn = (bool) => {
         setIsLoggedIn(bool)
     }
+
+    //Initialize Token States and pull from local storage
+    const [ authToken, setAuthToken] = useState({
+        access_token: '',
+        refresh_token: '',
+        expiry: '',
+    });
+    const setAuthTokenValues = (authTokens) => {
+        setAuthToken({
+            access_token: authTokens.access_token,
+            refresh_token: authTokens.refresh_token,
+            expiry: authTokens.expiry
+        })
+    }
+
     
     //Pull LoggedInstate data from local storage and set current states to that on mount
     useEffect(()=>{
-        setLoggedIn(JSON.parse(sessionStorage.getItem('isLoggedIn')));
+        setLoggedIn(JSON.parse(localStorage.getItem('isLoggedIn')));
+        setAuthTokenValues(JSON.parse(localStorage.getItem('authTokens')));
     },[])
+
+    useEffect(()=>{
+        localStorage.setItem('authTokens', JSON.stringify(authToken));
+    },[authToken])
 
     const props = {
         isLoggedIn,
-        setLoggedIn
+        setLoggedIn,
+        authToken
     }
 
     return (
