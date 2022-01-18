@@ -1,4 +1,7 @@
-import React from 'react'
+import{useContext} from 'react'
+import { SessionContext } from '../contexts/SessionContext';
+import { Navigate } from 'react-router-dom';
+
 
 const Trades = () => {
 
