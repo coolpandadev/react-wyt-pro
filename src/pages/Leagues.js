@@ -10,6 +10,7 @@ const Leagues = () => {
     if (!isLoggedIn) {
         return <Navigate to="/" />;
     }
+    
     return (
         <div>
             <h2>Leagues</h2>
