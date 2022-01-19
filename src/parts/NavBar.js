@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom'
 const NavBar = () => {
     return (
         <nav>
-            <ul class="flex">
-            <li class="mr-5">
+            <ul className="flex">
+            <li className="mr-5">
                 <Link to="/">Home</Link>
             </li>
-            <li class="ml-auto bg-red-400">
+            <li className="ml-auto bg-red-400">
                 <a href="https://wyt-rails.herokuapp.com/auth/yahoo_auth">Sign In with Yahoo</a>
             </li>
             </ul>

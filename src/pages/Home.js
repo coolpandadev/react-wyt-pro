@@ -9,7 +9,8 @@ const Home = () => {
     if (isLoggedIn) {
         return <Navigate to="/leagues" />;
     }
-
+    
+    //This page will contain information about the site as well as graphics 
     return (
         <div>
             <h2>Home</h2>
