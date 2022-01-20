@@ -18,7 +18,7 @@ export const useTokenUpdater = (oldToken, newToken, setAuthToken) => {
     }
     useEffect(() => {
         localStorage.setItem('authToken', newToken)
-    } ,[oldToken])
+    },[oldToken])
 }
 
 
@@ -34,9 +34,37 @@ export const getLeagues = (token, setAuthToken, setLeagues) => {
     
     axios(config)
     .then((response) => {
-        console.log(response);
+        console.log(response.headers['authorization']);
         setLeagues(response.data);
-        useTokenUpdater(token, response.headers['Authorization'],setAuthToken)
+        useTokenUpdater(token, response.headers['authorization'],setAuthToken)
+    })
+    .catch((error) => {
+        if(error.response) {
+            console.log(config.headers)
+            const errMsg = error.response.data.errors
+            //Display toast error with error message from response
+            // toggleToast(true);
+            // updateToastStat('error', errMsg)
+            // updateToastMsg(`${error.response.data.errors.full_messages}.`)
+        }
+    });
+};
+
+
+export const getTrades = (token, setAuthToken, leagueKey, setTrades) => {
+  
+    var config = {
+        method: 'GET',
+        url: `https://wyt-rails.herokuapp.com/api/trades?league_key=${leagueKey}`,
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+    };
+    
+    axios(config)
+    .then((response) => {
+        setTrades(response.data.length !== 0 ? response.data : null);
+        useTokenUpdater(token, response.headers['authorization'],setAuthToken)
     })
     .catch((error) => {
         if(error.response) {

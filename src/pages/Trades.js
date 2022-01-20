@@ -1,11 +1,23 @@
-import{useContext} from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { SessionContext } from '../contexts/SessionContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
+import { getTrades } from '../utils/Utils';
 
 
 const Trades = () => {
 
     const {isLoggedIn} = useContext(SessionContext);
+    const [ authToken, setAuthToken ] = useState(localStorage.getItem('authToken'));
+    const [trades, setTrades] = useState(null)
+    const params = useParams();
+
+    const setTradesCb = (tradeList) => {
+        setTrades(tradeList)
+    }
+
+    useEffect(() => {
+        getTrades(authToken, setAuthToken, params.leagueKey, setTradesCb)
+    },[])
 
     if (!isLoggedIn) {
         return <Navigate to="/" />;
@@ -13,8 +25,22 @@ const Trades = () => {
     
     return (
         <div>
-            <h2>Trades</h2>
+            {trades ? trades?.map(trade => (
+                <a href={`/trade/${trade?.id}`} key={trade?.id}>
+                    <div>
+                        <p>{trade?.created_at}</p>
+                        <p>{trade?.team_name}</p>
+                        <p>{trade?.team_key}</p>
+                    </div>
+                </a>
+            
+            ))
+            :
+            <p>You have no trades at the moment.</p>
+            }
         </div>
+            //Need to add create trade + edit and delete buttons for each trade
+
     )
 }
 
