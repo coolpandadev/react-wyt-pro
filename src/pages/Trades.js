@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { SessionContext } from '../contexts/SessionContext';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams, Link } from 'react-router-dom';
 import { getTrades } from '../utils/Utils';
 
 
@@ -43,11 +43,10 @@ const Trades = ({location}) => {
         </div>
         <Link
             to={{
-                pathname: `/trades/${league?.league_key}`,
+                pathname: `/trades/${params?.leagueKey}/new`,
                 state: location.state
             }}
         >Create Trade</Link>
-        <a href={`/trades/${params?.leagueKey}/new`}>Create Trade</a>
         </>
     )
 }
