@@ -7,40 +7,40 @@ const SessionContextProvider = ({children}) => {
     
     //These are the states we're initializing to store component data related to user Login/Authentication status and their authentication credentials
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || '');
     const setLoggedIn = (bool) => {
+        console.log('setLoggedIn works' + bool)
         setIsLoggedIn(bool)
     }
 
     //Initialize Token States and pull from local storage
-    const [ authToken, setAuthToken] = useState({
-        access_token: '',
-        refresh_token: '',
-        expiry: '',
-    });
-    const setAuthTokenValues = (authTokens) => {
-        setAuthToken({
-            access_token: authTokens.access_token,
-            refresh_token: authTokens.refresh_token,
-            expiry: authTokens.expiry
-        })
-    }
+    // const [ authToken, setAuthToken] = useState(null);
+    // const setAuthTokenCb = (token) => {
+    //     console.log('setAuthTokenCb works' + token)
+    //     setAuthToken(token)
+    // }
 
     
     //Pull LoggedInstate data from local storage and set current states to that on mount
-    useEffect(()=>{
-        setLoggedIn(JSON.parse(localStorage.getItem('isLoggedIn')));
-        setAuthTokenValues(JSON.parse(localStorage.getItem('authTokens')));
-    },[])
+    // useEffect(() => {
+    //     setAuthTokenCb(localStorage.getItem('authToken'));
+    // },[])
 
-    useEffect(()=>{
-        localStorage.setItem('authTokens', JSON.stringify(authToken));
-    },[authToken])
+    // useEffect(() => {
+    //     console.log('authToken useEffect works')
+    //     localStorage.setItem('authToken', authToken);
+    // },[authToken])
+
+    useEffect(() => {
+        console.log('setLoggedIn useEffect works')
+        localStorage.setItem('isLoggedIn', isLoggedIn);
+    },[isLoggedIn])
 
     const props = {
         isLoggedIn,
-        setLoggedIn,
-        authToken
+        setLoggedIn
+        // authToken,
+        // setAuthTokenCb
     }
 
     return (
