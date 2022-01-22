@@ -50,6 +50,7 @@ export const getLeagues = (token, setAuthToken, setLeagues) => {
     });
 };
 
+
 export const getTrades = (token, setAuthToken, leagueKey, setTrades) => {
   
     var config = {
@@ -77,6 +78,7 @@ export const getTrades = (token, setAuthToken, leagueKey, setTrades) => {
     });
 };
 
+
 export const getUserRoster = (token, setAuthToken, leagueKey, teamKey, setRoster) => {
   
     var config = {
@@ -90,33 +92,6 @@ export const getUserRoster = (token, setAuthToken, leagueKey, teamKey, setRoster
     axios(config)
     .then((response) => {
         setRoster(response.data.roster);
-        useTokenUpdater(token, response.headers['authorization'],setAuthToken)
-    })
-    .catch((error) => {
-        if(error.response) {
-            console.log(config.headers)
-            const errMsg = error.response.data.errors
-            //Display toast error with error message from response
-            // toggleToast(true);
-            // updateToastStat('error', errMsg)
-            // updateToastMsg(`${error.response.data.errors.full_messages}.`)
-        }
-    });
-};
-
-export const getLeagueTeams = (token, setAuthToken, leagueKey, setTeams) => {
-  
-    var config = {
-        method: 'GET',
-        url: `https://wyt-rails.herokuapp.com/api/roster_with_stats?league_key=${leagueKey}&team_key=${teamKey}`,
-        headers: {
-            "Authorization": `Bearer ${token}`
-        },
-    };
-    
-    axios(config)
-    .then((response) => {
-        setRoster(response.data.league_teams);
         useTokenUpdater(token, response.headers['authorization'],setAuthToken)
     })
     .catch((error) => {
