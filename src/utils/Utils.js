@@ -77,7 +77,7 @@ export const getTrades = (token, setAuthToken, leagueKey, setTrades) => {
     });
 };
 
-export const getUserRoster = (token, setAuthToken, leagueKey, teamKey, setRoster) => {
+export const getRosterInfo = (token, setAuthToken, leagueKey, teamKey, setRoster) => {
   
     var config = {
         method: 'GET',
@@ -108,7 +108,7 @@ export const getLeagueTeams = (token, setAuthToken, leagueKey, setTeams) => {
   
     var config = {
         method: 'GET',
-        url: `https://wyt-rails.herokuapp.com/api/roster_with_stats?league_key=${leagueKey}&team_key=${teamKey}`,
+        url: `https://wyt-rails.herokuapp.com/api/teams?league_key=${leagueKey}`,
         headers: {
             "Authorization": `Bearer ${token}`
         },
@@ -116,7 +116,7 @@ export const getLeagueTeams = (token, setAuthToken, leagueKey, setTeams) => {
     
     axios(config)
     .then((response) => {
-        setRoster(response.data.league_teams);
+        setTeams(response.data.league_teams);
         useTokenUpdater(token, response.headers['authorization'],setAuthToken)
     })
     .catch((error) => {
