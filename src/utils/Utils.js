@@ -34,7 +34,6 @@ export const getLeagues = (token, setAuthToken, setLeagues) => {
 
     axios(config)
         .then((response) => {
-            console.log(response.headers['authorization']);
             setLeagues(response.data);
             useTokenUpdater(token, response.headers['authorization'], setAuthToken)
         })
@@ -117,6 +116,7 @@ export const getLeagueTeams = (token, setAuthToken, leagueKey, setTeams) => {
     
     axios(config)
     .then((response) => {
+        console.log(response)
         setTeams(response.data.league_teams);
         useTokenUpdater(token, response.headers['authorization'],setAuthToken)
     })

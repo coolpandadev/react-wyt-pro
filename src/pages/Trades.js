@@ -4,10 +4,8 @@ import { Navigate, useParams, Link, useLocation } from 'react-router-dom';
 import { getTrades } from '../utils/Utils';
 
 
-const Trades = (props) => {
+const Trades = () => {
     const location = useLocation()
-    console.log(location)
-    console.log(props)
     const { isLoggedIn } = useContext(SessionContext);
     const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
     const [trades, setTrades] = useState(null)
@@ -44,10 +42,8 @@ const Trades = (props) => {
                 }
             </div>
             <Link
-                to={{
-                    pathname: `/trades/${params?.leagueKey}/new`,
-                    state: location.state
-                }}
+                to={`/trades/${params?.leagueKey}/new`}
+                state={location.state}
             >Create Trade</Link>
         </>
     )

@@ -26,7 +26,7 @@ const Leagues = () => {
         <div>
             {leagues && leagues?.map(league => (
                 <Link
-                    key={league?.league_key}
+                    key={league?.team?.team_key}
                     to={`/trades/${league?.league_key}`}
                     state={{
                         teamKey: league?.team?.team_key,
@@ -41,9 +41,9 @@ const Leagues = () => {
                         <p>{league?.team?.team_name}</p>
                         <img src={league?.team?.logo_url} />
                         {Object.entries(league?.roster_positions).map(([position, count]) => (
-                            <>
-                                <span>{position}</span><span>: {count} </span>
-                            </>
+                            <span key={position}>
+                                {position}: {count} 
+                            </span>
                         ))}
                     </div>
                 </Link>
