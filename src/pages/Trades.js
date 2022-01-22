@@ -4,7 +4,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import { getTrades } from '../utils/Utils';
 
 
-const Trades = () => {
+const Trades = ({location}) => {
 
     const {isLoggedIn} = useContext(SessionContext);
     const [ authToken, setAuthToken ] = useState(localStorage.getItem('authToken'));
@@ -16,7 +16,7 @@ const Trades = () => {
     }
 
     useEffect(() => {
-        getTrades(authToken, setAuthToken, params.leagueKey, setTradesCb)
+        getTrades(authToken, setAuthToken, params?.leagueKey, setTradesCb)
     },[])
 
     if (!isLoggedIn) {
@@ -24,6 +24,8 @@ const Trades = () => {
     }
     
     return (
+        <>
+        <div>{location.state.teamName}</div>
         <div>
             {trades ? trades?.map(trade => (
                 <a href={`/trade/${trade?.id}`} key={trade?.id}>
@@ -39,8 +41,14 @@ const Trades = () => {
             <p>You have no trades at the moment.</p>
             }
         </div>
-            //Need to add create trade + edit and delete buttons for each trade
-
+        <Link
+            to={{
+                pathname: `/trades/${league?.league_key}`,
+                state: location.state
+            }}
+        >Create Trade</Link>
+        <a href={`/trades/${params?.leagueKey}/new`}>Create Trade</a>
+        </>
     )
 }
 

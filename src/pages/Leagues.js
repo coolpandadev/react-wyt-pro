@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { SessionContext } from '../contexts/SessionContext'
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { getLeagues } from '../utils/Utils';
 
 
@@ -25,7 +25,15 @@ const Leagues = () => {
     return (
         <div>
             {leagues && leagues?.map(league => (
-                <a href={`/trades/${league?.league_key}`} key={league?.league_key}>
+                <Link 
+                    key={league?.league_key}
+                    to={{
+                    pathname: `/trades/${league?.league_key}`,
+                    state: {
+                        teamKey: league?.team?.team_key,
+                        teamName: league?.team?.team_name
+                    }
+                }}>
                     <div>
                         <p>{league?.league_key}</p>
                         <p>{league?.name}</p>
@@ -40,7 +48,7 @@ const Leagues = () => {
                             </>
                         ))}
                     </div>
-                </a>
+                </Link>
             
             ))}
         </div>

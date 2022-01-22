@@ -18,7 +18,7 @@ function App() {
           <Route index element={<Home/>} />
           <Route path="leagues" element={<Leagues />} />
           <Route path="trades/:leagueKey" element={<Trades />} />
-          <Route path="trade/:leagueKey/new" element={<NewTrade />} />
+          <Route path="trades/:leagueKey/new" element={<NewTrade />} />
           <Route path="trade/:tradeId" element={<Trade />} />
           <Route path="callback" element={<Callback />} />
           <Route path="*" element={<NoMatch />} />
