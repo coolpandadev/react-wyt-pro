@@ -34,7 +34,6 @@ export const getLeagues = (token, setAuthToken, setLeagues) => {
 
     axios(config)
         .then((response) => {
-            console.log(response.headers['authorization']);
             setLeagues(response.data);
             useTokenUpdater(token, response.headers['authorization'], setAuthToken)
         })
@@ -78,8 +77,7 @@ export const getTrades = (token, setAuthToken, leagueKey, setTrades) => {
         });
 };
 
-
-export const getUserRoster = (token, setAuthToken, leagueKey, teamKey, setRoster) => {
+export const getRosterInfo = (token, setAuthToken, leagueKey, teamKey, setRoster) => {
 
     var config = {
         method: 'GET',
@@ -107,6 +105,33 @@ export const getUserRoster = (token, setAuthToken, leagueKey, teamKey, setRoster
 };
 
 
+export const getLeagueTeams = (token, setAuthToken, leagueKey, setTeams) => {
+    var config = {
+        method: 'GET',
+        url: `https://wyt-rails.herokuapp.com/api/teams?league_key=${leagueKey}`,
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+    };
+    
+    axios(config)
+    .then((response) => {
+        console.log(response)
+        setTeams(response.data.league_teams);
+        useTokenUpdater(token, response.headers['authorization'],setAuthToken)
+    })
+    .catch((error) => {
+        if(error.response) {
+            console.log(config.headers)
+            const errMsg = error.response.data.errors
+            //Display toast error with error message from response
+            // toggleToast(true);
+            // updateToastStat('error', errMsg)
+            // updateToastMsg(`${error.response.data.errors.full_messages}.`)
+        }
+    });
+};
+
 export const getTradeInfo = (token, setAuthToken, tradeId, setTradeInfo) => {
     var config = {
         method: 'GET',
@@ -120,4 +145,14 @@ export const getTradeInfo = (token, setAuthToken, tradeId, setTradeInfo) => {
             setTradeInfo(response.data)
             useTokenUpdater(token, response.headers['authorization'], setAuthToken)
         })
+        .catch((error) => {
+            if (error.response) {
+                console.log(config.headers)
+                const errMsg = error.response.data.errors
+                //Display toast error with error message from response
+                // toggleToast(true);
+                // updateToastStat('error', errMsg)
+                // updateToastMsg(`${error.response.data.errors.full_messages}.`)
+            }
+        });
 };

@@ -9,7 +9,6 @@ const SessionContextProvider = ({children}) => {
 
     const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || '');
     const setLoggedIn = (bool) => {
-        console.log('setLoggedIn works' + bool)
         setIsLoggedIn(bool)
     }
 
