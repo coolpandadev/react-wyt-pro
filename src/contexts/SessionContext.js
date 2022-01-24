@@ -7,28 +7,25 @@ const SessionContextProvider = ({children}) => {
     
     //These are the states we're initializing to store component data related to user Login/Authentication status and their authentication credentials
 
-    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') || '');
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'false' ? false : !!localStorage.getItem('isLoggedIn'));
     const setLoggedIn = (bool) => {
         setIsLoggedIn(bool)
     }
 
-    //Initialize Token States and pull from local storage
-    // const [ authToken, setAuthToken] = useState(null);
-    // const setAuthTokenCb = (token) => {
-    //     console.log('setAuthTokenCb works' + token)
-    //     setAuthToken(token)
-    // }
+    // Initialize Token States and pull from local storage
+    const [ authToken, setAuthToken] = useState(null);
+    const setAuthTokenCb = (token) => {
+        setAuthToken(token)
+    }
 
-    
-    //Pull LoggedInstate data from local storage and set current states to that on mount
-    // useEffect(() => {
-    //     setAuthTokenCb(localStorage.getItem('authToken'));
-    // },[])
+    // Pull LoggedInstate data from local storage and set current states to that on mount
+    useEffect(() => {
+        setAuthTokenCb(localStorage.getItem('authToken'));
+    },[])
 
-    // useEffect(() => {
-    //     console.log('authToken useEffect works')
-    //     localStorage.setItem('authToken', authToken);
-    // },[authToken])
+    useEffect(() => {
+        localStorage.setItem('authToken', authToken);
+    },[authToken])
 
     useEffect(() => {
         console.log('setLoggedIn useEffect works')
@@ -37,9 +34,9 @@ const SessionContextProvider = ({children}) => {
 
     const props = {
         isLoggedIn,
-        setLoggedIn
-        // authToken,
-        // setAuthTokenCb
+        setLoggedIn,
+        authToken,
+        setAuthTokenCb
     }
 
     return (
