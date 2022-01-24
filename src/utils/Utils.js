@@ -113,23 +113,23 @@ export const getLeagueTeams = (token, setAuthToken, leagueKey, setTeams) => {
             "Authorization": `Bearer ${token}`
         },
     };
-    
+
     axios(config)
-    .then((response) => {
-        console.log(response)
-        setTeams(response.data.league_teams);
-        useTokenUpdater(token, response.headers['authorization'],setAuthToken)
-    })
-    .catch((error) => {
-        if(error.response) {
-            console.log(config.headers)
-            const errMsg = error.response.data.errors
-            //Display toast error with error message from response
-            // toggleToast(true);
-            // updateToastStat('error', errMsg)
-            // updateToastMsg(`${error.response.data.errors.full_messages}.`)
-        }
-    });
+        .then((response) => {
+            console.log(response)
+            setTeams(response.data.league_teams);
+            useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+        })
+        .catch((error) => {
+            if (error.response) {
+                console.log(config.headers)
+                const errMsg = error.response.data.errors
+                //Display toast error with error message from response
+                // toggleToast(true);
+                // updateToastStat('error', errMsg)
+                // updateToastMsg(`${error.response.data.errors.full_messages}.`)
+            }
+        });
 };
 
 export const getTradeInfo = (token, setAuthToken, tradeId, setTradeInfo) => {
@@ -156,3 +156,20 @@ export const getTradeInfo = (token, setAuthToken, tradeId, setTradeInfo) => {
             }
         });
 };
+export const getComments = (tradeId, setCommentInfo) => {
+    var config = {
+        method: 'GET',
+        url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/comments`
+    }
+    axios(config).then(response => setCommentInfo(response.data)).catch(error => console.log(error))
+}
+
+export const createComment = (tradeId, data) => {
+    var config = {
+        method: 'POST',
+        url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/comments`,
+        data
+    }
+    axios(config).then(response => console.log(response)).catch(error => console.log(error))
+}
+
