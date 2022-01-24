@@ -143,20 +143,20 @@ export const getLeagueTeams = (token, setAuthToken, leagueKey, setTeams) => {
         },
     };
     axios(config)
-    .then((response) => {
-        setTeams(response.data.league_teams);
-        useTokenUpdater(token, response.headers['authorization'],setAuthToken)
-    })
-    .catch((error) => {
-        if(error.response) {
-            console.log(config.headers)
-            const errMsg = error.response.data.errors
-            //Display toast error with error message from response
-            // toggleToast(true);
-            // updateToastStat('error', errMsg)
-            // updateToastMsg(`${error.response.data.errors.full_messages}.`)
-        }
-    });
+        .then((response) => {
+            setTeams(response.data.league_teams);
+            useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+        })
+        .catch((error) => {
+            if (error.response) {
+                console.log(config.headers)
+                const errMsg = error.response.data.errors
+                //Display toast error with error message from response
+                // toggleToast(true);
+                // updateToastStat('error', errMsg)
+                // updateToastMsg(`${error.response.data.errors.full_messages}.`)
+            }
+        });
 };
 
 export const getTradeInfo = (token, setAuthToken, tradeId, setTradeInfo) => {
@@ -183,6 +183,23 @@ export const getTradeInfo = (token, setAuthToken, tradeId, setTradeInfo) => {
             }
         });
 };
+export const getComments = (tradeId, setCommentInfo) => {
+    var config = {
+        method: 'GET',
+        url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/comments`
+    }
+    axios(config).then(response => setCommentInfo(response.data)).catch(error => console.log(error))
+}
+
+export const createComment = (tradeId, data) => {
+    var config = {
+        method: 'POST',
+        url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/comments`,
+        data
+    }
+    axios(config).then(response => console.log(response)).catch(error => console.log(error))
+}
+
 
 
 export const createTrade = (token, setAuthToken, leagueKey, trade) => {
@@ -218,3 +235,33 @@ export const createTrade = (token, setAuthToken, leagueKey, trade) => {
             }
         });
 };
+
+export const updateTrade = (token, setAuthToken, tradeId, data) => {
+    var config = {
+        method: 'PATCH',
+        url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}`,
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+        data
+    }
+    axios(config).then(response => {
+        console.log(response)
+        useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+    })
+}
+
+export const getOwnerTrade = (token, setAuthToken, tradeId, setCheckOwner) => {
+    var config = {
+        method: 'GET',
+        url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/owner`,
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+    axios(config).then(response => {
+        setCheckOwner(response.data.message === "true")
+        useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+    }).catch(error => console.log(error))
+}
+
