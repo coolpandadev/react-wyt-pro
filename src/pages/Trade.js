@@ -1,14 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { getTradeInfo, getComments, createComment } from '../utils/Utils'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useRef, useState, useContext } from 'react'
+import { getTradeInfo, getComments, createComment, getOwnerTrade } from '../utils/Utils'
+import { Link, useParams } from 'react-router-dom'
+import { SessionContext } from '../contexts/SessionContext'
 
 const Trade = () => {
+
+    const { isLoggedIn } = useContext(SessionContext);
+
+
+
     const commentNameRef = useRef()
     const commentDescriptionRef = useRef()
     const [tradeInfo, setTradeInfo] = useState({})
     const [comments, setComments] = useState([])
     const { tradeId } = useParams()
     const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
+    const [checkOwner, setCheckOwner] = useState(false);
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log(commentNameRef.current.value)
@@ -21,7 +28,11 @@ const Trade = () => {
         }
         createComment(tradeId, data)
     }
-
+    useEffect(() => {
+        if (isLoggedIn) {
+            getOwnerTrade(authToken, setAuthToken, tradeId, setCheckOwner)
+        }
+    }, [])
 
     useEffect(() => {
         getTradeInfo(authToken, setAuthToken, tradeId, setTradeInfo)
@@ -135,6 +146,10 @@ const Trade = () => {
                 </div>
                 <input type='submit' value='Submit' />
             </form>
+            {checkOwner && <div>
+                <Link to='edit' state={tradeInfo}>Edit Trade</Link>
+            </div>}
+
         </div>
     )
 }

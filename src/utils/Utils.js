@@ -206,3 +206,33 @@ export const createTrade = (token, setAuthToken, leagueKey, trade) => {
             }
         });
 };
+
+export const updateTrade = (token, setAuthToken, tradeId, data) => {
+    var config = {
+        method: 'PATCH',
+        url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}`,
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+        data
+    }
+    axios(config).then(response => {
+        console.log(response)
+        useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+    })
+}
+
+export const getOwnerTrade = (token, setAuthToken, tradeId, setCheckOwner) => {
+    var config = {
+        method: 'GET',
+        url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/owner`,
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+    axios(config).then(response => {
+        setCheckOwner(response.data.message === "true")
+        useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+    }).catch(error => console.log(error))
+}
+
