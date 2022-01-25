@@ -1,19 +1,19 @@
 import React, { useEffect, useRef, useState, useContext } from 'react'
 import { getTradeInfo, getComments, createComment, getOwnerTrade, deleteTrade } from '../utils/Utils'
-import { Navigate, Link, useParams } from 'react-router-dom'
+import { useNavigate, Link, useParams } from 'react-router-dom'
 import { SessionContext } from '../contexts/SessionContext'
 import toast from 'react-hot-toast'
 
 const Trade = () => {
     const { isLoggedIn } = useContext(SessionContext);
-    const commentNameRef = useRef()
-    const commentDescriptionRef = useRef()
-    const [tradeInfo, setTradeInfo] = useState({})
-    const [comments, setComments] = useState([])
-    const { tradeId } = useParams()
+    const navigate = useNavigate();
+    const commentNameRef = useRef();
+    const commentDescriptionRef = useRef();
+    const [tradeInfo, setTradeInfo] = useState({});
+    const [comments, setComments] = useState([]);
+    const { tradeId } = useParams();
     const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
     const [checkOwner, setCheckOwner] = useState(false);
-    console.log("Trade go first")
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log(commentNameRef.current.value)
@@ -27,18 +27,15 @@ const Trade = () => {
         createComment(tradeId, data)
     }
     const handleDeleteTrade = () => {
-        deleteTrade(authToken, setAuthToken, tradeId)
-        toast.success("Hello World")
-        console.log("Triggered")
-        return <Navigate to={`/trades${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`} state={{
-            teamName: tradeInfo.user_team_name
-        }} />
+        deleteTrade(authToken, setAuthToken, tradeId).then((res) => {
+            navigate(-1)
+        })
     }
-    const back = () => {
-        return <Navigate to={`/trades${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`} state={{
-            teamName: tradeInfo.user_team_name
-        }} />
-    }
+    // const back = () => {
+    //     return <Navigate to={`/trades${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`} state={{
+    //         teamName: tradeInfo.user_team_name
+    //     }} />
+    // }
     useEffect(() => {
         if (isLoggedIn) {
             getOwnerTrade(authToken, setAuthToken, tradeId, setCheckOwner)
@@ -161,7 +158,7 @@ const Trade = () => {
             {checkOwner && <div className='flex gap-1'>
                 <Link to='edit' state={tradeInfo}><button className='p-2 bg-red-300'>Edit Trade</button></Link>
                 <button className='p-2 bg-red-300' onClick={() => handleDeleteTrade()}>Delete Trade</button>
-                <button onClick={() => back()}>Back</button>
+                {/* <button onClick={() => back()}>Back</button> */}
             </div>}
         </div>
     )
