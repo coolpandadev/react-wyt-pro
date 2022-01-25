@@ -13,15 +13,11 @@ const SessionContextProvider = ({children}) => {
     }
 
     // Initialize Token States and pull from local storage
-    const [ authToken, setAuthToken] = useState(null);
+    const [ authToken, setAuthToken] = useState(localStorage.getItem('authToken') || '');
     const setAuthTokenCb = (token) => {
         setAuthToken(token)
     }
 
-    // Pull LoggedInstate data from local storage and set current states to that on mount
-    useEffect(() => {
-        setAuthTokenCb(localStorage.getItem('authToken'));
-    },[])
 
     useEffect(() => {
         localStorage.setItem('authToken', authToken);

@@ -63,8 +63,9 @@ const NewTrade = () => {
       players_to_send: playersToSend,
       players_to_receive: playersToReceive
     }
-    createTrade(authToken, setAuthTokenCb, params?.leagueKey, tradeDetails)
-    return navigate(-1)
+    createTrade(authToken, setAuthTokenCb, params?.leagueKey, tradeDetails).then((trade_id) => {
+      navigate(`/trades/${trade_id}`)
+    })
   }
 
   useEffect(() => {
