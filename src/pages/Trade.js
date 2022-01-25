@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState, useContext } from 'react'
-import { getTradeInfo, getComments, createComment, getOwnerTrade } from '../utils/Utils'
-import { Link, useParams } from 'react-router-dom'
+import { getTradeInfo, getComments, createComment, getOwnerTrade, deleteTrade } from '../utils/Utils'
+import { useNavigate, Link, useParams } from 'react-router-dom'
 import { SessionContext } from '../contexts/SessionContext'
+import toast from 'react-hot-toast'
 
 const Trade = () => {
-
+    const navigate = useNavigate()
     const { isLoggedIn } = useContext(SessionContext);
-
-
-
     const commentNameRef = useRef()
     const commentDescriptionRef = useRef()
     const [tradeInfo, setTradeInfo] = useState({})
@@ -27,6 +25,9 @@ const Trade = () => {
             }
         }
         createComment(tradeId, data)
+    }
+    const handleDeleteTrade = () => {
+        deleteTrade(authToken, setAuthToken, tradeId)
     }
     useEffect(() => {
         if (isLoggedIn) {
@@ -51,7 +52,7 @@ const Trade = () => {
                     <h2>{`User's Team Key: ${tradeInfo?.user_team_key}`}</h2>
                     <div>
                         <h2>Players to Send</h2>
-                        {tradeInfo?.players_to_send && tradeInfo?.players_to_send.length !== 0 ? tradeInfo?.players_to_send.map((player, index) =>
+                        {tradeInfo?.players_to_send && tradeInfo?.players_to_send.length !== 0 ? tradeInfo?.players_to_send.map((player) =>
                             <div key={player?.player_key} data-key={player?.player_key}>
                                 <p>{player?.player_name}</p>
                                 <p>{player?.team_abbr}</p>
@@ -131,8 +132,9 @@ const Trade = () => {
                 <h2>Comments</h2>
                 {comments && comments.length !== 0 ? comments.map((comment, index) => <div className='flex flex-col'>
                     <h2>{comment.name}</h2>
-                    <p>{comment.description}</p>
-                    <p>{ }</p>
+                    {<p>{comment.description}</p>}
+                    <p>{`${comment.created_at.split("T")[0]} at ${comment.created_at.split("T")[1].slice(0, -8)}`}</p>
+                    <p>Update</p>
                 </div>) : <h3>No Comments</h3>}
             </div>
             <form onSubmit={(e) => handleSubmit(e)}>
@@ -146,10 +148,10 @@ const Trade = () => {
                 </div>
                 <input type='submit' value='Submit' />
             </form>
-            {checkOwner && <div>
-                <Link to='edit' state={tradeInfo}>Edit Trade</Link>
+            {checkOwner && <div className='flex gap-1'>
+                <Link to='edit' state={tradeInfo}><button className='p-2 bg-red-300'>Edit Trade</button></Link>
+                <button className='p-2 bg-red-300' onClick={() => handleDeleteTrade()}>Delete Trade</button>
             </div>}
-
         </div>
     )
 }

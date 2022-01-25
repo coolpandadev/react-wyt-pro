@@ -10,6 +10,7 @@ import NoMatch from './pages/NoMatch';
 import Callback from './pages/Callback'
 import NewTrade from './pages/NewTrade';
 import EditTrade from './pages/EditTrade';
+import { Toaster } from 'react-hot-toast';
 
 
 function App() {
@@ -27,6 +28,14 @@ function App() {
           <Route path="*" element={<NoMatch />} />
         </Route>
       </Routes>
+      <Toaster position='top-center'
+        toastOptions={{
+          className: 'p-3',
+          style: {
+            backgroundColor: 'black',
+            color: 'white'
+          },
+        }} />
     </SessionContextProvider>
   );
 }
