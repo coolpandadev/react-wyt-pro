@@ -44,9 +44,6 @@ export const useTokenUpdater = (oldToken, newToken, setAuthToken) => {
     if (oldToken !== newToken) {
         setAuthToken(newToken)
     }
-    useEffect(() => {
-        localStorage.setItem('authToken', newToken)
-    }, [oldToken])
 }
 
 
@@ -221,7 +218,6 @@ export const createTrade = (token, setAuthToken, leagueKey, trade) => {
         .then((response) => {
             //success toast here
             toast.success(response.data.message)
-            // useTokenUpdater(token, response.headers['authorization'], setAuthToken)
             console.log(response.data.id)
             console.log(response)
             return response.data.id
@@ -271,6 +267,7 @@ export const deleteTrade = (token, setAuthToken, tradeId) => {
     return axios(config)
         .then((response) => {
             //success toast here
+            console.log(response)
             useTokenUpdater(token, response.headers['authorization'], setAuthToken)
             return response
         })
