@@ -5,14 +5,13 @@ import { SessionContext } from '../contexts/SessionContext'
 import toast from 'react-hot-toast'
 
 const Trade = () => {
-    const { isLoggedIn } = useContext(SessionContext);
+    const { isLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
     const navigate = useNavigate();
     const commentNameRef = useRef();
     const commentDescriptionRef = useRef();
     const [tradeInfo, setTradeInfo] = useState({});
     const [comments, setComments] = useState([]);
     const { tradeId } = useParams();
-    const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
     const [checkOwner, setCheckOwner] = useState(false);
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -27,10 +26,10 @@ const Trade = () => {
         createComment(tradeId, data)
     }
     const handleDeleteTrade = () => {
-        deleteTrade(authToken, setAuthToken, tradeId).then((res) => {
+        deleteTrade(authToken, setAuthTokenCb, tradeId).then((res) => {
             console.log(res)
             toast.success(res.data.message)
-            return navigate(`/trades${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`, {
+            return navigate(`/trades/${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`, {
                 state: {
                     teamName: tradeInfo.user_team_name,
                     teamKey: tradeInfo.user_team_key
@@ -45,12 +44,12 @@ const Trade = () => {
     // }
     useEffect(() => {
         if (isLoggedIn) {
-            getOwnerTrade(authToken, setAuthToken, tradeId, setCheckOwner)
+            getOwnerTrade(authToken, setAuthTokenCb, tradeId, setCheckOwner)
         }
     }, [])
 
     useEffect(() => {
-        getTradeInfo(authToken, setAuthToken, tradeId, setTradeInfo)
+        getTradeInfo(authToken, setAuthTokenCb, tradeId, setTradeInfo)
     }, [])
     useEffect(() => {
         getComments(tradeId, setComments)

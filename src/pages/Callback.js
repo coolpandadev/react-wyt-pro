@@ -6,9 +6,7 @@ import { useTokenUpdater } from '../utils/Utils';
 import { Buffer } from 'buffer';
 
 const Callback = () => {
-    const [authToken, setAuthToken] = useState(null);
-
-    const { setLoggedIn } = useContext(SessionContext)
+    const { setLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext)
     let query = useQuery();
     //Decrypt token before assigning it to tokenHash
     let newToken = Buffer.from(query.get("token"), "base64").toString();
@@ -17,11 +15,13 @@ const Callback = () => {
     useEffect(() => {
         if (newToken !== null) {
             setLoggedIn(true)
+            if (newToken !== authToken) {
+                setAuthTokenCb(newToken)
+            }
         } else {
             console.log('Authentication Error')
         }
     }, [])
-    useTokenUpdater(authToken, newToken, setAuthToken)
 
 
     return <Navigate to="/leagues" />
