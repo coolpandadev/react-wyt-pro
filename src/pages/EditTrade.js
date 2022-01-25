@@ -7,7 +7,7 @@ function EditTrade() {
     const { tradeId } = useParams()
     const { state } = useLocation()
     const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
-    const { id, players_to_receive, players_to_send, user_other_rosters, totrade_other_rosters, user_team_name, totrade_team_key, user_team_key, totrade_team_name } = state
+    const { players_to_receive, players_to_send, user_other_rosters, totrade_other_rosters, user_team_name, totrade_team_key, user_team_key, totrade_team_name } = state
     let players_to_send_container = []
     let players_to_receive_container = []
     let user_rosters = [...players_to_send, ...user_other_rosters]
@@ -33,11 +33,6 @@ function EditTrade() {
         }
         updateTrade(authToken, setAuthToken, tradeId, data)
     }
-    // const [userRoster, setUserRoster] = useState([]);
-    // const [leagueTeams, setLeagueTeams] = useState(null);
-    // const [partner, setPartner] = useState(null);
-    // const [partnerOptions, setPartnerOptions] = useState(null);
-    // const [partnerRoster, setPartnerRoster] = useState([]);
     const [userCheckedState, setUserCheckedState] = useState([]);
     const [playersToSend, setPlayersToSend] = useState([]);
     const [playersToReceive, setPlayersToReceive] = useState([]);
@@ -60,14 +55,6 @@ function EditTrade() {
     useEffect(() => {
         setPartnerRoster([...totrade_rosters])
     }, [])
-
-    // useEffect(() => {
-    //     setPlayersToSend([...players_to_send_container])
-    // }, [])
-    // useEffect(() => {
-    //     setPlayersToReceive([...players_to_receive_container])
-    // }, [])
-
     useEffect(() => {
         let emptyArray = []
         user_rosters.forEach(roster => {
@@ -139,7 +126,7 @@ function EditTrade() {
                     )
                     : <>
                         <p>
-                            No Team Selected
+                            Team not available
                         </p>
                     </>
             }
@@ -173,15 +160,15 @@ function EditTrade() {
                             </div>
                         </div>
                     )
-                    : <>
+                    :
+                    <>
                         <p>
-                            No Team Selected
+                            Team not available
                         </p>
                     </>
             }
         </div>
         <button onClick={() => handleSubmit()}>Update</button>
-        <button>Cancel</button>
     </div>;
 }
 
