@@ -28,7 +28,14 @@ const Trade = () => {
     }
     const handleDeleteTrade = () => {
         deleteTrade(authToken, setAuthToken, tradeId).then((res) => {
-            navigate(-1)
+            console.log(res)
+            toast.success(res.data.message)
+            return navigate(`/trades${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`, {
+                state: {
+                    teamName: tradeInfo.user_team_name,
+                    teamKey: tradeInfo.user_team_key
+                }
+            })
         })
     }
     // const back = () => {

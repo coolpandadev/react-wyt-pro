@@ -221,19 +221,11 @@ export const createTrade = (token, setAuthToken, leagueKey, trade) => {
         .then((response) => {
             //success toast here
             toast.success(response.data.message)
-            useTokenUpdater(token, response.headers['authorization'], setAuthToken)
-            return response.data.trade_id
+            // useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+            console.log(response.data.id)
+            console.log(response)
+            return response.data.id
         })
-        .catch((error) => {
-            if (error.response) {
-                console.log(config.headers)
-                const errMsg = error.response.data.errors
-                //Display toast error with error message from response
-                // toggleToast(true);
-                // updateToastStat('error', errMsg)
-                // updateToastMsg(`${error.response.data.errors.full_messages}.`)
-            }
-        });
 };
 
 export const updateTrade = (token, setAuthToken, tradeId, data) => {
@@ -280,10 +272,7 @@ export const deleteTrade = (token, setAuthToken, tradeId) => {
         .then((response) => {
             //success toast here
             useTokenUpdater(token, response.headers['authorization'], setAuthToken)
-            // toast.success('Delete works')
-        }).catch((error) => {
-            console.log(error.response)
-            toast.error(error.response.message)
+            return response
         })
 }
 
