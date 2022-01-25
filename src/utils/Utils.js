@@ -4,6 +4,7 @@ import axios from 'axios'
 
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 export const userLogout = (authToken, setAuthToken, setLoggedIn) => {
     console.log(authToken)
@@ -174,8 +175,8 @@ export const getTradeInfo = (token, setAuthToken, tradeId, setTradeInfo) => {
         })
         .catch((error) => {
             if (error.response) {
-                console.log(config.headers)
-                const errMsg = error.response.data.errors
+                console.log(error.response)
+                toast.error(error.response.data.message)
                 //Display toast error with error message from response
                 // toggleToast(true);
                 // updateToastStat('error', errMsg)
@@ -197,7 +198,7 @@ export const createComment = (tradeId, data) => {
         url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/comments`,
         data
     }
-    axios(config).then(response => console.log(response)).catch(error => console.log(error))
+    axios(config).then(response => console.log(response)).catch(error => error.response.data.errors.forEach(error => toast.error(error)))
 }
 
 
@@ -221,6 +222,7 @@ export const createTrade = (token, setAuthToken, leagueKey, trade) => {
     axios(config)
         .then((response) => {
             //success toast here
+            toast.success(response.data.message)
             console.log(response.data.data.message)
             useTokenUpdater(token, response.headers['authorization'], setAuthToken)
         })
@@ -247,6 +249,7 @@ export const updateTrade = (token, setAuthToken, tradeId, data) => {
     }
     axios(config).then(response => {
         console.log(response)
+        toast.success(response.data.message)
         useTokenUpdater(token, response.headers['authorization'], setAuthToken)
     })
 }
@@ -261,7 +264,28 @@ export const getOwnerTrade = (token, setAuthToken, tradeId, setCheckOwner) => {
     }
     axios(config).then(response => {
         setCheckOwner(response.data.message === "true")
+        toast.success("You are the owner of this trade")
         useTokenUpdater(token, response.headers['authorization'], setAuthToken)
     }).catch(error => console.log(error))
+}
+
+export const deleteTrade = (token, setAuthToken, tradeId) => {
+    var config = {
+        method: 'DELETE',
+        url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}`,
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+
+    }
+    axios(config)
+        .then((response) => {
+            //success toast here
+            toast.success(response.data.message)
+            useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+        }).catch((error) => {
+            console.log(error.response)
+            toast.error(error.response.data.message)
+        })
 }
 
