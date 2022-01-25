@@ -6,7 +6,7 @@ import { getLeagues } from '../utils/Utils';
 
 const Leagues = () => {
 
-    const { isLoggedIn, authToken,setAuthTokenCb } = useContext(SessionContext);
+    const { isLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
     // const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
 
     const [leagues, setLeagues] = useState(null)

@@ -1,11 +1,12 @@
 import { useContext, useState, useEffect } from 'react'
 import { SessionContext } from '../contexts/SessionContext';
-import { Navigate, useParams, Link, useLocation } from 'react-router-dom';
+import { Navigate, useNavigate, useParams, Link, useLocation } from 'react-router-dom';
 import { getTrades } from '../utils/Utils';
 
 
 const Trades = () => {
     const location = useLocation()
+    const navigate = useNavigate()
     const { isLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
     // const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
     const [trades, setTrades] = useState(null)
@@ -16,7 +17,7 @@ const Trades = () => {
     }
 
     useEffect(() => {
-        getTrades(authToken, setAuthTokenCb, params?.leagueKey, setTradesCb)
+        getTrades(authToken, setAuthTokenCb, params?.leagueKey, setTradesCb, navigate)
     }, [location.pathname])
 
     if (!isLoggedIn) {

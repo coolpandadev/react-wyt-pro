@@ -1,7 +1,5 @@
 import React from "react";
 import axios from 'axios'
-
-
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react";
 import toast from "react-hot-toast";
@@ -219,12 +217,12 @@ export const createTrade = (token, setAuthToken, leagueKey, trade) => {
             players_to_receive: trade.players_to_receive
         }
     }
-    axios(config)
+    return axios(config)
         .then((response) => {
             //success toast here
             toast.success(response.data.message)
-            console.log(response.data.data.message)
             useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+            return response.data.trade_id
         })
         .catch((error) => {
             if (error.response) {
@@ -278,14 +276,14 @@ export const deleteTrade = (token, setAuthToken, tradeId) => {
         }
 
     }
-    axios(config)
+    return axios(config)
         .then((response) => {
             //success toast here
-            toast.success(response.data.message)
             useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+            // toast.success('Delete works')
         }).catch((error) => {
             console.log(error.response)
-            toast.error(error.response.data.message)
+            toast.error(error.response.message)
         })
 }
 

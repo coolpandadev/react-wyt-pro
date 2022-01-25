@@ -12,10 +12,10 @@ const NavBar = () => {
     }
 
     return (
-        <nav>
+        <nav className="p-4">
             <ul className="flex">
             <li className="mr-5">
-                <Link to="/">Home</Link>
+                <Link to="/" className="font-logo text-xl">WYT?</Link>
             </li>
             { isLoggedIn ? 
                 <button onClick={()=>handleClick()}>Logout</button>
