@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import { SessionContext } from '../contexts/SessionContext';
-import { Navigate, useParams, useLocation, Link } from 'react-router-dom';
+import { Navigate, useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import { getRosterInfo } from '../utils/Utils';
 import { getLeagueTeams } from '../utils/Utils';
 import { createTrade } from '../utils/Utils';
@@ -8,7 +8,8 @@ import Select from 'react-select';
 
 const NewTrade = () => {
   const location = useLocation()
-  const {isLoggedIn, authToken, setAuthTokenCb} = useContext(SessionContext);
+  const navigate = useNavigate()
+  const { isLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
   // const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
   const [userRoster, setUserRoster] = useState([]);
   const [leagueTeams, setLeagueTeams] = useState(null);
@@ -22,7 +23,7 @@ const NewTrade = () => {
   const params = useParams();
 
   const setUserRosterCb = (roster) => {
-      setUserRoster(roster)
+    setUserRoster(roster)
   }
 
   const setLeagueTeamsCb = (teams) => {
@@ -31,7 +32,7 @@ const NewTrade = () => {
 
   const setPartnerRosterCb = (roster) => {
     setPartnerRoster(roster)
-}
+  }
 
   // const handleTeamChange = (e) => {
   //   let idx = e.target.selectedIndex
@@ -48,12 +49,12 @@ const NewTrade = () => {
   const handleUserPlayerSelect = (selectedIndex) => {
     let updatedUserCheckedState = userCheckedState.map((bool, stateIndex) => stateIndex === selectedIndex ? !bool : bool)
     setUserCheckedState(updatedUserCheckedState)
-  }  
+  }
 
   const handlePartnerPlayerSelect = (selectedIndex) => {
     let updatedPartnerCheckedState = partnerCheckedState.map((bool, stateIndex) => stateIndex === selectedIndex ? !bool : bool)
     setPartnerCheckedState(updatedPartnerCheckedState)
-  }  
+  }
 
   const handleSubmit = () => {
     let tradeDetails = {
@@ -63,98 +64,99 @@ const NewTrade = () => {
       players_to_receive: playersToReceive
     }
     createTrade(authToken, setAuthTokenCb, params?.leagueKey, tradeDetails)
-  }  
+    return navigate(-1)
+  }
 
   useEffect(() => {
-      getRosterInfo(authToken, setAuthTokenCb, params?.leagueKey, location.state.teamKey, setUserRosterCb)
-      getLeagueTeams(authToken, setAuthTokenCb, params?.leagueKey, setLeagueTeamsCb)
-  },[])
+    getRosterInfo(authToken, setAuthTokenCb, params?.leagueKey, location.state.teamKey, setUserRosterCb)
+    getLeagueTeams(authToken, setAuthTokenCb, params?.leagueKey, setLeagueTeamsCb)
+  }, [])
 
   useEffect(() => {
     let teamOptions = []
-    leagueTeams?.forEach(team => team?.team_key !== location.state.teamKey && teamOptions.push({value: team?.team_key, label: team?.team_name}))
+    leagueTeams?.forEach(team => team?.team_key !== location.state.teamKey && teamOptions.push({ value: team?.team_key, label: team?.team_name }))
     setPartnerOptions(teamOptions)
-  },[leagueTeams])
+  }, [leagueTeams])
 
   useEffect(() => {
     setUserCheckedState(new Array(userRoster?.length).fill(false))
-  },[userRoster])
+  }, [userRoster])
 
   useEffect(() => {
     setPartnerCheckedState(new Array(partnerRoster?.length).fill(false))
-  },[partnerRoster])
+  }, [partnerRoster])
 
   useEffect(() => {
     if (partner !== null) {
       getRosterInfo(authToken, setAuthTokenCb, params?.leagueKey, partner?.value, setPartnerRosterCb)
     }
-  },[partner])
+  }, [partner])
 
   useEffect(() => {
     let playerKeys = []
-    userCheckedState.forEach((bool, index) => bool && playerKeys.push({player_key: userRoster[index].player_key, player_name: userRoster[index].player_name}))
+    userCheckedState.forEach((bool, index) => bool && playerKeys.push({ player_key: userRoster[index].player_key, player_name: userRoster[index].player_name }))
     setPlayersToSend(playerKeys)
-  },[userCheckedState])
+  }, [userCheckedState])
 
   useEffect(() => {
     let playerKeys = []
-    partnerCheckedState.forEach((bool, index) => bool && playerKeys.push({player_key: partnerRoster[index].player_key, player_name: partnerRoster[index].player_name}))
+    partnerCheckedState.forEach((bool, index) => bool && playerKeys.push({ player_key: partnerRoster[index].player_key, player_name: partnerRoster[index].player_name }))
     setPlayersToReceive(playerKeys)
-  },[partnerCheckedState])
+  }, [partnerCheckedState])
 
 
 
   if (!isLoggedIn) {
-      return <Navigate to="/" />;
+    return <Navigate to="/" />;
   }
 
 
   return (
     <>
-    <div>
-      <p>{params?.leagueKey}</p>
-      <p>{location.state.teamName}</p>
-    </div>
-    <div>
-      {
-        userRoster ? 
-          userRoster?.map((player, index) => 
-            <div key={player?.player_key}>
-              <input 
-                type="checkbox" 
-                id="player_to_send" 
-                name="player_to_send" 
-                value={player?.player_key} 
-                checked={userCheckedState[index] || false} 
-                onChange={() => handleUserPlayerSelect(index)}
-              />
-              <p>{player?.player_name}</p> 
-              <p>{player?.team_abbr}</p>
-              <p>{player?.player_positions}</p>  
-              <img src={player?.player_image} />
-              <div className="flex flex-col">
-                <div className="flex">
-                  {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
-                </div>
-                <div className="flex">
-                  {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
+      <div>
+        <p>{params?.leagueKey}</p>
+        <p>{location.state.teamName}</p>
+      </div>
+      <div>
+        {
+          userRoster ?
+            userRoster?.map((player, index) =>
+              <div key={player?.player_key}>
+                <input
+                  type="checkbox"
+                  id="player_to_send"
+                  name="player_to_send"
+                  value={player?.player_key}
+                  checked={userCheckedState[index] || false}
+                  onChange={() => handleUserPlayerSelect(index)}
+                />
+                <p>{player?.player_name}</p>
+                <p>{player?.team_abbr}</p>
+                <p>{player?.player_positions}</p>
+                <img src={player?.player_image} />
+                <div className="flex flex-col">
+                  <div className="flex">
+                    {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
+                  </div>
+                  <div className="flex">
+                    {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
+                  </div>
                 </div>
               </div>
-            </div>
-          )
-        : <>
-          <p>
-              This league is currently inactive
-          </p>
-          <Link to="/">Back button here</Link>
-        </>
+            )
+            : <>
+              <p>
+                This league is currently inactive
+              </p>
+              <Link to="/">Back button here</Link>
+            </>
         }
-    </div>
-    { userRoster ?
-      <>
-        <div>
-        <label htmlFor="role">Choose a team to trade with:</label>
-          {/* < select
+      </div>
+      {userRoster ?
+        <>
+          <div>
+            <label htmlFor="role">Choose a team to trade with:</label>
+            {/* < select
               onChange={e => handleTeamChange(e)}
               className="browser-default custom-select" 
               defaultValue={partner?.team_name}
@@ -172,53 +174,53 @@ const NewTrade = () => {
               }
           </select > */}
 
-          < Select
+            < Select
               onChange={setPartner}
               options={partnerOptions}
               placeholder="Select Team"
               defaultValue=""
-              >
-          </Select >
-      </div>
-      {
-        partnerRoster ? 
-          partnerRoster?.map((player, index) => 
-            <div key={player?.player_key}>
-              <input 
-                type="checkbox" 
-                id="player_to_receive" 
-                name="player_to_receive" 
-                value={player?.player_key} 
-                checked={partnerCheckedState[index] || false} 
-                onChange={() => handlePartnerPlayerSelect(index)}
-              />
-              <p>{player?.player_name}</p> 
-              <p>{player?.team_abbr}</p>
-              <p>{player?.player_positions}</p>  
-              <img src={player?.player_image} />
-              <div className="flex flex-col">
-                <div className="flex">
-                  {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
+            >
+            </Select >
+          </div>
+          {
+            partnerRoster ?
+              partnerRoster?.map((player, index) =>
+                <div key={player?.player_key}>
+                  <input
+                    type="checkbox"
+                    id="player_to_receive"
+                    name="player_to_receive"
+                    value={player?.player_key}
+                    checked={partnerCheckedState[index] || false}
+                    onChange={() => handlePartnerPlayerSelect(index)}
+                  />
+                  <p>{player?.player_name}</p>
+                  <p>{player?.team_abbr}</p>
+                  <p>{player?.player_positions}</p>
+                  <img src={player?.player_image} />
+                  <div className="flex flex-col">
+                    <div className="flex">
+                      {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
+                    </div>
+                    <div className="flex">
+                      {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
+                    </div>
+                  </div>
                 </div>
-                <div className="flex">
-                  {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
-                </div>
-              </div>
-            </div>
-          )
-        : <>
-          <p>
-              No partner team selected
-          </p>
+              )
+              : <>
+                <p>
+                  No partner team selected
+                </p>
+              </>
+          }
         </>
-        }
-      </>
-      :
-      null
-    }
-    <div>
-      { userRoster && partnerRoster && (playersToSend?.length > 0) && (playersToReceive?.length > 0) && <button onClick={()=>handleSubmit()}>Create Trade</button>}
-    </div>
+        :
+        null
+      }
+      <div>
+        {userRoster && partnerRoster && (playersToSend?.length > 0) && (playersToReceive?.length > 0) && <button onClick={() => handleSubmit()}>Create Trade</button>}
+      </div>
     </>
   );
 };
