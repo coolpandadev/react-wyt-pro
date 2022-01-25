@@ -64,7 +64,7 @@ const NewTrade = () => {
       players_to_receive: playersToReceive
     }
     createTrade(authToken, setAuthTokenCb, params?.leagueKey, tradeDetails).then((trade_id) => {
-      navigate(`/trades/${trade_id}`)
+      navigate(`/trade/${trade_id}`).catch(error => console.log(error))
     })
   }
 
