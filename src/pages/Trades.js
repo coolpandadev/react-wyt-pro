@@ -10,14 +10,14 @@ const Trades = () => {
     // const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
     const [trades, setTrades] = useState(null)
     const params = useParams();
-
+    console.log("Trades go first")
     const setTradesCb = (tradeList) => {
         setTrades(tradeList)
     }
 
     useEffect(() => {
         getTrades(authToken, setAuthTokenCb, params?.leagueKey, setTradesCb)
-    }, [])
+    }, [location.pathname])
 
     if (!isLoggedIn) {
         return <Navigate to="/" />;
@@ -25,7 +25,7 @@ const Trades = () => {
 
     return (
         <>
-            <div>{location.state.teamName}</div>
+            <div>{location.state?.teamName}</div>
             <div>
                 {trades ? trades?.map(trade => (
                     <a href={`/trade/${trade?.id}`} key={trade?.id}>
@@ -43,7 +43,7 @@ const Trades = () => {
             </div>
             <Link
                 to={`/trades/${params?.leagueKey}/new`}
-                state={location.state}
+                state={location?.state}
             >Create Trade</Link>
         </>
     )

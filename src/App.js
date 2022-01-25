@@ -30,6 +30,7 @@ function App() {
       </Routes>
       <Toaster position='top-center'
         toastOptions={{
+          duration: 3000,
           className: 'p-3',
           style: {
             backgroundColor: 'black',

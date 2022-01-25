@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { updateTrade } from '../utils/Utils'
 
 
 function EditTrade() {
+    const navigate = useNavigate();
     const { tradeId } = useParams()
     const { state } = useLocation()
     const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
@@ -32,6 +33,7 @@ function EditTrade() {
             "players_to_receive": playersToReceive,
         }
         updateTrade(authToken, setAuthToken, tradeId, data)
+        return navigate(`/trade/${tradeId}`)
     }
     const [userCheckedState, setUserCheckedState] = useState([]);
     const [playersToSend, setPlayersToSend] = useState([]);
