@@ -1,16 +1,30 @@
-import React from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { SessionContext } from '../contexts/SessionContext';
 import { Link } from 'react-router-dom'
+import { userLogout } from '../utils/Utils';
 
 const NavBar = () => {
+    const {isLoggedIn, setLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
+    // const [authToken, setAuthToken] = useState(null);
+
+    const handleClick = () => {
+        userLogout(authToken, setAuthTokenCb, setLoggedIn)
+    }
+
     return (
         <nav>
             <ul className="flex">
             <li className="mr-5">
                 <Link to="/">Home</Link>
             </li>
-            <li className="ml-auto bg-red-400">
-                <a href="https://wyt-rails.herokuapp.com/auth/yahoo_auth">Sign In with Yahoo</a>
-            </li>
+            { isLoggedIn ? 
+                <button onClick={()=>handleClick()}>Logout</button>
+            :
+                <li className="ml-auto bg-red-400">
+                    <a href="https://wyt-rails.herokuapp.com/auth/yahoo_auth">Sign In with Yahoo</a>
+                </li>
+            }
+                
             </ul>
         </nav>
     )

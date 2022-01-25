@@ -6,8 +6,8 @@ import { getLeagues } from '../utils/Utils';
 
 const Leagues = () => {
 
-    const { isLoggedIn } = useContext(SessionContext);
-    const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
+    const { isLoggedIn, authToken,setAuthTokenCb } = useContext(SessionContext);
+    // const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
 
     const [leagues, setLeagues] = useState(null)
     const setLeaguesCb = (leagueInfo) => {
@@ -15,7 +15,7 @@ const Leagues = () => {
     }
 
     useEffect(() => {
-        getLeagues(authToken, setAuthToken, setLeaguesCb)
+        getLeagues(authToken, setAuthTokenCb, setLeaguesCb)
     }, [])
 
     if (!isLoggedIn) {

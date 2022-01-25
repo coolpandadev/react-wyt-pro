@@ -8,8 +8,8 @@ import Select from 'react-select';
 
 const NewTrade = () => {
   const location = useLocation()
-  const {isLoggedIn} = useContext(SessionContext);
-  const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
+  const {isLoggedIn, authToken, setAuthTokenCb} = useContext(SessionContext);
+  // const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
   const [userRoster, setUserRoster] = useState([]);
   const [leagueTeams, setLeagueTeams] = useState(null);
   const [partner, setPartner] = useState(null);
@@ -62,12 +62,12 @@ const NewTrade = () => {
       players_to_send: playersToSend,
       players_to_receive: playersToReceive
     }
-    createTrade(authToken, setAuthToken, params?.leagueKey, tradeDetails)
+    createTrade(authToken, setAuthTokenCb, params?.leagueKey, tradeDetails)
   }  
 
   useEffect(() => {
-      getRosterInfo(authToken, setAuthToken, params?.leagueKey, location.state.teamKey, setUserRosterCb)
-      getLeagueTeams(authToken, setAuthToken, params?.leagueKey, setLeagueTeamsCb)
+      getRosterInfo(authToken, setAuthTokenCb, params?.leagueKey, location.state.teamKey, setUserRosterCb)
+      getLeagueTeams(authToken, setAuthTokenCb, params?.leagueKey, setLeagueTeamsCb)
   },[])
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const NewTrade = () => {
 
   useEffect(() => {
     if (partner !== null) {
-      getRosterInfo(authToken, setAuthToken, params?.leagueKey, partner?.value, setPartnerRosterCb)
+      getRosterInfo(authToken, setAuthTokenCb, params?.leagueKey, partner?.value, setPartnerRosterCb)
     }
   },[partner])
 

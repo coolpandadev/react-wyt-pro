@@ -5,6 +5,35 @@ import axios from 'axios'
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react";
 
+export const userLogout = (authToken, setAuthToken, setLoggedIn) => {
+    console.log(authToken)
+    var config = {
+        method: 'DELETE',
+        url: `https://wyt-rails.herokuapp.com/auth/yahoo_auth/logout`,
+        headers: {
+            "Authorization": `Bearer ${authToken}`
+        }
+    }
+    axios(config)
+        .then((response) => {
+            //change isLoggedIn to false
+            //delete auth token
+            setAuthToken(null)
+            setLoggedIn(false)
+            console.log(response.data.data.message)
+        })
+        .catch((error) => {
+            if (error.response) {
+                console.log(config.headers)
+                const errMsg = error.response.data.errors
+                //Display toast error with error message from response
+                // toggleToast(true);
+                // updateToastStat('error', errMsg)
+                // updateToastMsg(`${error.response.data.errors.full_messages}.`)
+            }
+        });
+};
+
 export const useQuery = () => {
     const { search } = useLocation();
 

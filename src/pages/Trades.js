@@ -6,8 +6,8 @@ import { getTrades } from '../utils/Utils';
 
 const Trades = () => {
     const location = useLocation()
-    const { isLoggedIn } = useContext(SessionContext);
-    const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
+    const { isLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
+    // const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
     const [trades, setTrades] = useState(null)
     const params = useParams();
 
@@ -16,7 +16,7 @@ const Trades = () => {
     }
 
     useEffect(() => {
-        getTrades(authToken, setAuthToken, params?.leagueKey, setTradesCb)
+        getTrades(authToken, setAuthTokenCb, params?.leagueKey, setTradesCb)
     }, [])
 
     if (!isLoggedIn) {
