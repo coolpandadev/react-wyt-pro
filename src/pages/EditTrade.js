@@ -32,8 +32,12 @@ function EditTrade() {
             "players_to_send": playersToSend,
             "players_to_receive": playersToReceive,
         }
-        updateTrade(authToken, setAuthToken, tradeId, data)
-        return navigate(`/trade/${tradeId}`)
+        updateTrade(authToken, setAuthToken, tradeId, data).then(res => {
+            return navigate(`/trade/${tradeId}`)
+        }).catch(error => {
+            return navigate(`/trade/${tradeId}`)
+        })
+
     }
     const [userCheckedState, setUserCheckedState] = useState([]);
     const [playersToSend, setPlayersToSend] = useState([]);

@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom"
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
+
 export const userLogout = (authToken, setAuthToken, setLoggedIn) => {
     console.log(authToken)
     var config = {
@@ -39,11 +40,21 @@ export const useQuery = () => {
     // useMemo will only recompute the memoized value when one of the dependencies has changed. This optimization helps to avoid expensive calculations on every render.
     return React.useMemo(() => new URLSearchParams(search), [search]);
 }
+const errorToast = (obj) => {
+    if (obj.hasOwnProperty('error')) {
+        toast.error(obj.error)
+    }
+    else {
+        toast.error(obj.message)
+    }
+
+}
 
 export const useTokenUpdater = (oldToken, newToken, setAuthToken) => {
     if (oldToken !== newToken) {
         setAuthToken(newToken)
     }
+
 }
 
 
@@ -155,36 +166,30 @@ export const getLeagueTeams = (token, setAuthToken, leagueKey, setTeams) => {
         });
 };
 
-export const getTradeInfo = (token, setAuthToken, tradeId, setTradeInfo) => {
+export const getTradeInfo = (tradeId, setTradeInfo) => {
     var config = {
         method: 'GET',
         url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}`,
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
     }
-    axios(config)
+    return axios(config)
         .then((response) => {
             setTradeInfo(response.data)
-            useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+            return response
         })
         .catch((error) => {
             if (error.response) {
                 console.log(error.response)
-                toast.error(error.response.data.message)
-                //Display toast error with error message from response
-                // toggleToast(true);
-                // updateToastStat('error', errMsg)
-                // updateToastMsg(`${error.response.data.errors.full_messages}.`)
+                errorToast(error.response.data)
+                throw new Error("API Error")
             }
-        });
+        })
 };
 export const getComments = (tradeId, setCommentInfo) => {
     var config = {
         method: 'GET',
         url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/comments`
     }
-    axios(config).then(response => setCommentInfo(response.data)).catch(error => console.log(error))
+    axios(config).then(response => setCommentInfo(response.data)).catch(error => errorToast(error.response.data))
 }
 
 export const createComment = (tradeId, data) => {
@@ -220,7 +225,11 @@ export const createTrade = (token, setAuthToken, leagueKey, trade) => {
             toast.success(response.data.message)
             console.log(response.data.id)
             console.log(response)
+            useTokenUpdater(token, response.headers['authorization'], setAuthToken)
             return response.data.id
+        }).catch(error => {
+            errorToast(error.response.data)
+            throw new Error("API Error")
         })
 };
 
@@ -233,10 +242,13 @@ export const updateTrade = (token, setAuthToken, tradeId, data) => {
         },
         data
     }
-    axios(config).then(response => {
+    return axios(config).then(response => {
         console.log(response)
         toast.success(response.data.message)
         useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+    }).catch(error => {
+        errorToast(error.response.data)
+        throw new Error("API Error")
     })
 }
 
@@ -248,11 +260,14 @@ export const getOwnerTrade = (token, setAuthToken, tradeId, setCheckOwner) => {
             "Authorization": `Bearer ${token}`
         }
     }
-    axios(config).then(response => {
+    return axios(config).then(response => {
+        console.log(response)
         setCheckOwner(response.data.message === "true")
         toast.success("You are the owner of this trade")
         useTokenUpdater(token, response.headers['authorization'], setAuthToken)
-    }).catch(error => console.log(error))
+    }).catch(error => {
+        errorToast(error.response.data)
+    })
 }
 
 export const deleteTrade = (token, setAuthToken, tradeId) => {
@@ -267,9 +282,12 @@ export const deleteTrade = (token, setAuthToken, tradeId) => {
     return axios(config)
         .then((response) => {
             //success toast here
-            console.log(response)
             useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+            toast.success(response.data.message)
             return response
+        }).catch(error => {
+            errorToast(error.response.data)
+            throw new Error("API Error")
         })
 }
 
