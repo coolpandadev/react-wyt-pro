@@ -11,6 +11,7 @@ import Callback from './pages/Callback'
 import NewTrade from './pages/NewTrade';
 import EditTrade from './pages/EditTrade';
 import { Toaster } from 'react-hot-toast';
+import ExpiredTrade from './pages/ExpiredTrade';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="trades/:leagueKey/new" element={<NewTrade />} />
           <Route path="trade/:tradeId" element={<Trade />} />
           <Route path="trade/:tradeId/edit" element={<EditTrade />} />
+          <Route path="trade/expired" element={<ExpiredTrade />} />
           <Route path="callback" element={<Callback />} />
           <Route path="*" element={<NoMatch />} />
         </Route>

@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState, useContext } from 'react'
 import { getTradeInfo, getComments, createComment, getOwnerTrade, deleteTrade } from '../utils/Utils'
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import { SessionContext } from '../contexts/SessionContext'
-import toast from 'react-hot-toast'
 
 const Trade = () => {
     const { isLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
@@ -28,7 +27,13 @@ const Trade = () => {
     const handleDeleteTrade = () => {
         deleteTrade(authToken, setAuthTokenCb, tradeId).then((res) => {
             console.log(res)
-            toast.success(res.data.message)
+            return navigate(`/trades/${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`, {
+                state: {
+                    teamName: tradeInfo.user_team_name,
+                    teamKey: tradeInfo.user_team_key
+                }
+            })
+        }).catch(error => {
             return navigate(`/trades/${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`, {
                 state: {
                     teamName: tradeInfo.user_team_name,
@@ -37,11 +42,14 @@ const Trade = () => {
             })
         })
     }
-    // const back = () => {
-    //     return <Navigate to={`/trades${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`} state={{
-    //         teamName: tradeInfo.user_team_name
-    //     }} />
-    // }
+    const back = () => {
+        return navigate(`/trades/${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`, {
+            state: {
+                teamName: tradeInfo.user_team_name,
+                teamKey: tradeInfo.user_team_key
+            }
+        })
+    }
     useEffect(() => {
         if (isLoggedIn) {
             getOwnerTrade(authToken, setAuthTokenCb, tradeId, setCheckOwner)
@@ -49,7 +57,7 @@ const Trade = () => {
     }, [])
 
     useEffect(() => {
-        getTradeInfo(authToken, setAuthTokenCb, tradeId, setTradeInfo)
+        getTradeInfo(tradeId, setTradeInfo).catch(error => navigate(`/trade/expired`))
     }, [])
     useEffect(() => {
         getComments(tradeId, setComments)
@@ -164,8 +172,9 @@ const Trade = () => {
             {checkOwner && <div className='flex gap-1'>
                 <Link to='edit' state={tradeInfo}><button className='p-2 bg-red-300'>Edit Trade</button></Link>
                 <button className='p-2 bg-red-300' onClick={() => handleDeleteTrade()}>Delete Trade</button>
-                {/* <button onClick={() => back()}>Back</button> */}
+
             </div>}
+            <button onClick={() => back()}>Back</button>
         </div>
     )
 }

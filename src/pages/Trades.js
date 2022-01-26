@@ -17,6 +17,7 @@ const Trades = () => {
     }
 
     useEffect(() => {
+        console.log(`Token: ${authToken}`)
         getTrades(authToken, setAuthTokenCb, params?.leagueKey, setTradesCb, navigate)
     }, [location.pathname])
 
