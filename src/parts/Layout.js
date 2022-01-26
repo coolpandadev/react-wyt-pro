@@ -5,9 +5,12 @@ import { Outlet } from 'react-router-dom'
 
 const Layout = () => {
     return (
-        <div>
-            <NavBar/>
-            <Outlet />
+        <div className='w-screen h-auto'>
+            <NavBar />
+            <div className='w-full h-auto'>
+                <Outlet />
+            </div>
+
         </div>
     )
 }

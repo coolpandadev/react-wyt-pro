@@ -18,7 +18,7 @@ const Trade = () => {
         console.log(commentDescriptionRef.current.value)
         let data = {
             comment: {
-                name: commentNameRef.current.value,
+                name: isLoggedIn ? "User" : commentNameRef.current.value,
                 description: commentDescriptionRef.current.value
             }
         }
@@ -159,10 +159,10 @@ const Trade = () => {
                 </div>) : <h3>No Comments</h3>}
             </div>
             <form onSubmit={(e) => handleSubmit(e)}>
-                <div className='flex'>
+                {!(isLoggedIn) && <div className='flex'>
                     <label>Name:</label>
                     <input type='text' name='name' ref={commentNameRef} />
-                </div>
+                </div>}
                 <div className='flex'>
                     <label>Description:</label>
                     <textarea ref={commentDescriptionRef} />
