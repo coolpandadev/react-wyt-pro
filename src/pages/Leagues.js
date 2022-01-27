@@ -23,32 +23,43 @@ const Leagues = () => {
     }
 
     return (
-        <div>
-            {leagues && leagues?.map(league => (
-                <Link
-                    key={league?.team?.team_key}
-                    to={`/trades/${league?.league_key}`}
-                    state={{
-                        teamKey: league?.team?.team_key,
-                        teamName: league?.team?.team_name
-                    }}>
-                    <div className='pointer-events-none'>
-                        <p>{league?.league_key}</p>
-                        <p>{league?.name}</p>
-                        <p>{league?.scoring_type}</p>
-                        <p>{league?.num_teams}</p>
-                        <p>{league?.team?.team_key}</p>
-                        <p>{league?.team?.team_name}</p>
-                        <img src={league?.team?.logo_url} />
-                        {Object.entries(league?.roster_positions).map(([position, count]) => (
-                            <span key={position}>
-                                {position}: {count} 
-                            </span>
-                        ))}
-                    </div>
-                </Link>
+        <div className='px-4 max-w-screen-xl m-auto'>
+            <h2 className="uppercase text-4xl mb-4">Leagues</h2>
 
-            ))}
+            <div className="flex flex-wrap sm:flex-nowrap w-full m-auto gap-y-4 sm:gap-x-4">
+                {leagues && leagues?.map(league => (
+                    <Link
+                        key={league?.team?.team_key}
+                        to={`/trades/${league?.league_key}`}
+                        state={{
+                            teamKey: league?.team?.team_key,
+                            teamName: league?.team?.team_name,
+                            leagueName: league?.league_name
+                        }}
+                        className="w-full"
+                        >
+                        <div className="shadow-md p-4 rounded-md flex flex-col justify-between w-full">
+                            <div className="flex gap-x-4 items-center">
+                                <img className="rounded-full w-10 h-10 md-w-20 md-h-20"src={league?.team?.logo_url} />    
+                                <div>
+                                    <p className="text-xs">{league?.league_name}</p>
+                                    <p className="font-header text-md">{league?.team?.team_name}</p>
+                                    <p className="text-xs">{league?.scoring_type} - {league?.num_teams} Team</p>
+                                </div>
+                            </div>
+                            {/* <div>
+                                {Object.entries(league?.roster_positions).map(([position, count]) => (
+                                    <span key={position}>
+                                        {position}: {count} 
+                                    </span>
+                                ))}
+                            </div> */}
+
+                        </div>
+                    </Link>
+
+                ))}
+            </div>
         </div>
     )
 }

@@ -226,6 +226,7 @@ export const createTrade = (token, setAuthToken, leagueKey, trade) => {
             trade: {
                 team_key: trade.teamKey,
                 team_name: trade.teamName,
+                team_logo: trade.team_logo
             },
             players_to_send: trade.players_to_send,
             players_to_receive: trade.players_to_receive

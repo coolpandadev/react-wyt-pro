@@ -63,6 +63,7 @@ const NewTrade = () => {
       players_to_send: playersToSend,
       players_to_receive: playersToReceive
     }
+    leagueTeams.forEach(team => {(team?.team_key == partner?.value) && (tradeDetails.team_logo = team?.team_logo_url)})
     createTrade(authToken, setAuthTokenCb, params?.leagueKey, tradeDetails).then(tradeId => {
       navigate(`/trade/${tradeId}`)
     }).catch(error => {
