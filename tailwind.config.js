@@ -3,8 +3,8 @@ module.exports = {
   theme: {
     fontFamily: {
       'logo': ['Faster One'],
-      'header': ['Plaster'],
-      'body': ['Dongle']
+      'header': ['Squada One'],
+      'body': ['Miriam Libre']
     },
     extend: {
       backgroundImage: {
