@@ -6,7 +6,7 @@ import Button from '../components/Button';
 import LinkButton from '../components/LinkButtons';
 
 const NavBar = () => {
-    const {isLoggedIn, setLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
+    const { isLoggedIn, setLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
     // const [authToken, setAuthToken] = useState(null);
 
     const handleClick = () => {
@@ -29,8 +29,8 @@ const NavBar = () => {
                         classnames="text-white"
                     >Sign In with Yahoo</LinkButton>
                 </li>
-            }
-                
+                }
+
             </ul>
         </nav>
     )

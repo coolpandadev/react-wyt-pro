@@ -189,7 +189,19 @@ export const getComments = (tradeId, setCommentInfo) => {
         method: 'GET',
         url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/comments`
     }
-    axios(config).then(response => setCommentInfo(response.data)).catch(error => errorToast(error.response.data))
+    axios(config).then(response => {
+        let container = []
+        if (response.data.length !== 0) {
+            response.data.forEach((datas) => {
+                container.push({ fullName: datas.name, text: datas.description, created_at: datas.created_at })
+            })
+            setCommentInfo(container)
+        }
+        else {
+            setCommentInfo(response.data)
+        }
+
+    }).catch(error => errorToast(error.response.data))
 }
 
 export const createComment = (tradeId, data) => {

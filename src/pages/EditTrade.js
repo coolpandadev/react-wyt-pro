@@ -9,18 +9,30 @@ function EditTrade() {
     const { state } = useLocation()
     const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
     const { players_to_receive, players_to_send, user_other_rosters, totrade_other_rosters, user_team_name, totrade_team_key, user_team_key, totrade_team_name } = state
+    let clean_players_to_send = []
+    let clean_players_to_receive = []
     let players_to_send_container = []
     let players_to_receive_container = []
-    let user_rosters = [...players_to_send, ...user_other_rosters]
-    let totrade_rosters = [...players_to_receive, ...totrade_other_rosters]
     players_to_send.forEach(player => {
+        if (!(player.player_name === 'Dropped')) {
+            clean_players_to_send.push(player)
+        }
+    })
+    players_to_receive.forEach(player => {
+        if (!(player.player_name === 'Dropped')) {
+            clean_players_to_receive.push(player)
+        }
+    })
+    let user_rosters = [...clean_players_to_send, ...user_other_rosters]
+    let totrade_rosters = [...clean_players_to_receive, ...totrade_other_rosters]
+    clean_players_to_send.forEach(player => {
         let obj = {
             player_key: player.player_key,
             player_name: player.player_name
         }
         players_to_send_container.push(obj)
     })
-    players_to_receive.forEach(player => {
+    clean_players_to_receive.forEach(player => {
         let obj = {
             player_key: player.player_key,
             player_name: player.player_name
@@ -146,8 +158,8 @@ function EditTrade() {
                         <div key={player?.player_key}>
                             <input
                                 type="checkbox"
-                                id="player_to_send"
-                                name="player_to_send"
+                                id="player_to_receive"
+                                name="player_to_receive"
                                 value={player?.player_key}
                                 checked={partnerCheckedState[index] || false}
                                 onChange={() => handlePartnerPlayerSelect(index)}
