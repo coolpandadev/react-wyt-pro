@@ -58,6 +58,20 @@ export const useTokenUpdater = (oldToken, newToken, setAuthToken) => {
 }
 
 
+export const getUserData = (token, setAuthToken, setUserData) => {
+    var config = {
+        method: 'GET',
+        url: 'https://wyt-rails.herokuapp.com/user',
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    }
+    return axios(config).then(response => {
+        setUserData(response.data)
+        useTokenUpdater(token, response.headers['authorization'], setAuthToken)
+    })
+}
+
 export const getLeagues = (token, setAuthToken, setLeagues) => {
 
     var config = {
@@ -190,16 +204,7 @@ export const getComments = (tradeId, setCommentInfo) => {
         url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/comments`
     }
     axios(config).then(response => {
-        let container = []
-        if (response.data.length !== 0) {
-            response.data.forEach((datas) => {
-                container.push({ fullName: datas.name, text: datas.description, created_at: datas.created_at })
-            })
-            setCommentInfo(container)
-        }
-        else {
-            setCommentInfo(response.data)
-        }
+        setCommentInfo(response.data)
 
     }).catch(error => errorToast(error.response.data))
 }
@@ -276,7 +281,6 @@ export const getOwnerTrade = (token, setAuthToken, tradeId, setCheckOwner) => {
     return axios(config).then(response => {
         console.log(response)
         setCheckOwner(response.data.message === "true")
-        toast.success("You are the owner of this trade")
         useTokenUpdater(token, response.headers['authorization'], setAuthToken)
     }).catch(error => {
         errorToast(error.response.data)
