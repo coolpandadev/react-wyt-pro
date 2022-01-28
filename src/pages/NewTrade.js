@@ -156,10 +156,9 @@ const NewTrade = () => {
             }
           </div>
           {userRoster ?
-            <div className="flex flex-col gap-y-4 overflow-x-auto mt-8 border-t border-slate-400 md:mt-0 md:w-[46%] md:border-l md:pl-4">
+            <div className="flex flex-col gap-y-4 overflow-x-auto mt-8 border-t border-slate-400 md:mt-0 md:w-[46%] md:border-t-0 md:border-l md:pl-4">
               {partner && <h2 className="text-4xl pt-8 md:mt-0">{partner?.label}</h2>}
-              {
-                partnerRoster ?
+              {partnerRoster &&
                   partnerRoster?.map((player, index) =>
                   <PlayerCard 
                     key={index}
@@ -169,15 +168,14 @@ const NewTrade = () => {
                     checkedArr={partnerCheckedState} 
                   />
                   )
-                  : <>
-                    <p>
-                      No partner team selected
-                    </p>
-                  </>
               }
             </div>
             :
-            null
+            <>
+              <p>
+                No partner team selected
+              </p>
+            </>
           }
       </div>
         <div>
