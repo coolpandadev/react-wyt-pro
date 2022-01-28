@@ -152,7 +152,6 @@ const Trade = () => {
                     </div>
                 </div>
             </div>
-
             <div className='comments w-full h-auto border border-slate-700 px-3'>
                 {<h2>{`${comments?.length} Comments`}</h2>}
                 {/* <CommentSection commentsArray={comments} setComment={setComments} /> */}

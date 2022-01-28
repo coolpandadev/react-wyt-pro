@@ -172,10 +172,10 @@ const NewTrade = () => {
             </div>
             :
             <>
-              <p>
-                No partner team selected
-              </p>
-            </>
+            <p>
+              No partner team selected
+            </p>
+          </>
           }
       </div>
         <div>
