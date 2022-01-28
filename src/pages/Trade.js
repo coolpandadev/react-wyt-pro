@@ -3,7 +3,7 @@ import { getTradeInfo, getComments, createComment, getOwnerTrade, deleteTrade, g
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import { SessionContext } from '../contexts/SessionContext'
 import Button from '../components/Button'
-import PlayerCard from '../parts/PlayerCard'
+import LastSeen from '../components/LastSeen'
 import ReadOnlyPlayerCard from '../parts/ReadOnlyPlayerCard'
 
 const Trade = () => {
@@ -16,7 +16,7 @@ const Trade = () => {
     const [comments, setComments] = useState([]);
     const { tradeId } = useParams();
     const [checkOwner, setCheckOwner] = useState(false);
-    const [cleanTradeData, setCleanData] = useState({ cleanPlayersToSend: [], cleanPlayersToReceive: [] })
+    // const [cleanTradeData, setCleanData] = useState({ cleanPlayersToSend: [], cleanPlayersToReceive: [] })
     const handleSubmit = (e) => {
         e.preventDefault()
         // console.log(commentNameRef.current.value)
@@ -48,17 +48,25 @@ const Trade = () => {
             })
         })
     }
-    const back = () => {
-        return navigate(`/trades/${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`, {
-            state: {
-                teamName: tradeInfo.user_team_name,
-                teamKey: tradeInfo.user_team_key
-            }
-        })
-    }
+    // const back = () => {
+    //     return navigate(`/trades/${tradeInfo.user_team_key.split('.').slice(0, -2).join('.')}`, {
+    //         state: {
+    //             teamName: tradeInfo.user_team_name,
+    //             teamKey: tradeInfo.user_team_key
+    //         }
+    //     })
+    // }
+
+    const rtf = new Intl.RelativeTimeFormat("en", {
+        localeMatcher: "best fit", // other values: "lookup"
+        numeric: "auto", // other values: "auto"
+        style: "long", // other values: "short" or "narrow"
+    });
+
     useEffect(() => {
         if (isLoggedIn) {
-            Promise.all(getOwnerTrade(authToken, setAuthTokenCb, tradeId, setCheckOwner), getUserData(authToken, setAuthTokenCb, setUserData))
+            getOwnerTrade(authToken, setAuthTokenCb, tradeId, setCheckOwner)
+            getUserData(authToken, setAuthTokenCb, setUserData)
         }
     }, [])
 
@@ -70,7 +78,7 @@ const Trade = () => {
     }, [comments])
 
     return (
-        <div className='flex flex-col px-4 max-w-screen-xl m-auto'>
+        <div className='flex flex-col px-4 max-w-screen-xl m-auto pb-20'>
 
             <div className="pt-4">
                 <p>{tradeInfo?.league_name}</p>
@@ -104,10 +112,8 @@ const Trade = () => {
                         : null
                     }
                 </div>
-            </div>
-            <div className="flex flex-col md:flex-row justify-center">
-                <div className="flex flex-col gap-y-4 overflow-x-auto md:w-[46%] md:pr-4">
-                    <h2 className="text-4xl sticky top-0 left-0 pt-8">{tradeInfo?.totrade_team_name}</h2>
+                <div className="flex flex-col gap-y-4 overflow-x-auto mt-8 border-t border-slate-400 md:mt-0 md:w-[46%] md:border-t-0 md:border-l md:pl-4">
+                    <h2 className="text-4xl sticky top-0 left-0 pt-8 md:mt-0">{tradeInfo?.totrade_team_name}</h2>
                     {tradeInfo.players_to_receive ?
                         tradeInfo.players_to_receive?.map((player, index) =>
                             <ReadOnlyPlayerCard
@@ -135,31 +141,37 @@ const Trade = () => {
                     }
                 </div>
             </div>
-            <div className='comments w-full h-auto border border-slate-700 px-3'>
-                {<h2>{`${comments?.length} Comments`}</h2>}
-                {/* <CommentSection commentsArray={comments} setComment={setComments} /> */}
-                {comments && comments.length !== 0 ? comments.map((comment, index) => <div key={comment.id} className='flex flex-col shadow-md p-4 rounded-md items-start gap-x-4'>
-                    <h2>{comment.name}</h2>
-                    {<p>{comment.description}</p>}
-                    <p className='text-gray-400'>{`${comment.created_at.split("T")[0]} at ${comment.created_at.split("T")[1].slice(0, -8)}`}</p>
-                </div>) : <h3>No Comments</h3>}
+
+            {checkOwner && 
+            <div className="ml-auto pt-8">
+                <Button children={"Delete Trade"} cb={() => handleDeleteTrade()} classnames={"text-red-500"} color={"bg-white"} />
+                <Link to='edit' state={tradeInfo}><Button color={"bg-slate-700"} classnames={"text-white ml-4"} children={"Edit Trade"} /></Link>
             </div>
-            <form onSubmit={(e) => handleSubmit(e)}>
+            }
+            <div className="comments w-full h-auto px-3 pt-8">
+                {<h2 className="text-2xl">{`Comments (${comments?.length})`}</h2>}
+                <hr className="py-1"/>
+                {comments && comments.length !== 0 ? comments.map((comment) => <div key={comment.id} className="flex flex-col py-2 items-start gap-x-4 border-b border-slate-200">
+                    <div className="flex justify-between w-full items-center">
+                        <h2>{comment.name}</h2>
+                        <LastSeen date={comment.created_at} classnames="text-xs text-slate-500 ml-auto"/>
+                    </div>
+                    {<p className="capitalize pt-2 text-slate-700 text-sm">{comment.description}</p>}
+                    {/* <p className="text-gray-400">{`${comment.created_at.split("T")[0]} at ${comment.created_at.split("T")[1].slice(0, -8)}`}</p> */}
+                </div>) : <h3 className="text-center">No Comments yet</h3>}
+            </div>
+            <form onSubmit={(e) => handleSubmit(e)} className="flex flex-col">
                 {!(isLoggedIn) && <div className='flex'>
                     <label>Name:</label>
                     <input type='text' name='name' ref={commentNameRef} />
                 </div>}
                 <div className='flex'>
-                    <label>Description:</label>
-                    <textarea className='border border-slate-700 resize-none w-[200px]' ref={commentDescriptionRef} />
+                    <textarea className='rounded-md bg-stone-100 resize-none w-full mt-8 mx-3 px-4 py-2 h-20 text-xs' ref={commentDescriptionRef} placeholder="Comment here"/>
                 </div>
-                <input type='submit' value='Submit' />
+                <Button cb={handleSubmit} color="bg-emerald-500" type="submit" classnames="text-white self-end mt-4 mr-3">Submit</Button>
             </form>
-            {checkOwner && <div className=''>
-                <Link to='edit' state={tradeInfo}><Button color={"bg-slate-700"} classnames={"text-white ml-auto"} children={"Edit Trade"} /></Link>
-                <Button children={"Delete Trade"} cb={() => handleDeleteTrade()} classnames={"text-white ml-auto"} color={"bg-slate-700"} />
-            </div>}
-            <Button color={"bg-slate-700"} classnames={"text-white ml-auto"} children={"Back"} cb={() => back()} />
+
+            {/* <Button color={"bg-slate-700"} classnames={"text-white ml-auto"} children={"Back"} cb={() => back()} /> */}
             {/* <button onClick={() => back()}>Back</button> */}
         </div>
     )
