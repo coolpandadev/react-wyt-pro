@@ -210,13 +210,13 @@ export const getComments = (tradeId, setCommentInfo) => {
     }).catch(error => errorToast(error.response.data))
 }
 
-export const createComment = (tradeId, data) => {
+export const createComment = (tradeId, data, setCommentInfo) => {
     var config = {
         method: 'POST',
         url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/comments`,
         data
     }
-    axios(config).then(response => console.log(response)).catch(error => error.response.data.errors.forEach(error => toast.error(error)))
+    axios(config).then(response => getComments(tradeId, setCommentInfo)).catch(error => error.response.data.errors.forEach(error => toast.error(error)))
 }
 
 

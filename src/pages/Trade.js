@@ -28,7 +28,7 @@ const Trade = () => {
             }
         }
         console.log(data)
-        createComment(tradeId, data)
+        createComment(tradeId, data, setComments)
     }
     const handleDeleteTrade = () => {
         deleteTrade(authToken, setAuthTokenCb, tradeId).then((res) => {
@@ -75,7 +75,7 @@ const Trade = () => {
     }, [])
     useEffect(() => {
         getComments(tradeId, setComments)
-    }, [comments])
+    }, [])
 
     return (
         <div className='flex flex-col px-4 max-w-screen-xl m-auto pb-20'>
@@ -142,19 +142,19 @@ const Trade = () => {
                 </div>
             </div>
 
-            {checkOwner && 
-            <div className="ml-auto pt-8">
-                <Button children={"Delete Trade"} cb={() => handleDeleteTrade()} classnames={"text-red-500"} color={"bg-white"} />
-                <Link to='edit' state={tradeInfo}><Button color={"bg-slate-700"} classnames={"text-white ml-4"} children={"Edit Trade"} /></Link>
-            </div>
+            {checkOwner &&
+                <div className="ml-auto pt-8">
+                    <Button children={"Delete Trade"} cb={() => handleDeleteTrade()} classnames={"text-red-500"} color={"bg-white"} />
+                    <Link to='edit' state={tradeInfo}><Button color={"bg-slate-700"} classnames={"text-white ml-4"} children={"Edit Trade"} /></Link>
+                </div>
             }
             <div className="comments w-full h-auto px-3 pt-8">
                 {<h2 className="text-2xl">{`Comments (${comments?.length})`}</h2>}
-                <hr className="py-1"/>
+                <hr className="py-1" />
                 {comments && comments.length !== 0 ? comments.map((comment) => <div key={comment.id} className="flex flex-col py-2 items-start gap-x-4 border-b border-slate-200">
                     <div className="flex justify-between w-full items-center">
                         <h2>{comment.name}</h2>
-                        <LastSeen date={comment.created_at} classnames="text-xs text-slate-500 ml-auto"/>
+                        <LastSeen date={comment.created_at} classnames="text-xs text-slate-500 ml-auto" />
                     </div>
                     {<p className="capitalize pt-2 text-slate-700 text-sm">{comment.description}</p>}
                     {/* <p className="text-gray-400">{`${comment.created_at.split("T")[0]} at ${comment.created_at.split("T")[1].slice(0, -8)}`}</p> */}
@@ -166,7 +166,7 @@ const Trade = () => {
                     <input type='text' name='name' ref={commentNameRef} />
                 </div>}
                 <div className='flex'>
-                    <textarea className='rounded-md bg-stone-100 resize-none w-full mt-8 mx-3 px-4 py-2 h-20 text-xs' ref={commentDescriptionRef} placeholder="Comment here"/>
+                    <textarea className='rounded-md bg-stone-100 resize-none w-full mt-8 mx-3 px-4 py-2 h-20 text-xs' ref={commentDescriptionRef} placeholder="Comment here" />
                 </div>
                 <Button cb={handleSubmit} color="bg-emerald-500" type="submit" classnames="text-white self-end mt-4 mr-3">Submit</Button>
             </form>
