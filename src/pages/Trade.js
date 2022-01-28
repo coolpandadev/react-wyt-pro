@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState, useContext } from 'react'
-import { getTradeInfo, getComments, createComment, getOwnerTrade, deleteTrade } from '../utils/Utils'
+import { getTradeInfo, getComments, createComment, getOwnerTrade, deleteTrade, getUserData } from '../utils/Utils'
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import { SessionContext } from '../contexts/SessionContext'
+import Button from '../components/Button'
+
 
 const Trade = () => {
-    const { isLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
+    const { isLoggedIn, authToken, setAuthTokenCb, userData, setUserData } = useContext(SessionContext);
+    const { full_name } = userData
     const navigate = useNavigate();
     const commentNameRef = useRef();
     const commentDescriptionRef = useRef();
@@ -14,14 +17,15 @@ const Trade = () => {
     const [checkOwner, setCheckOwner] = useState(false);
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(commentNameRef.current.value)
-        console.log(commentDescriptionRef.current.value)
+        // console.log(commentNameRef.current.value)
+        // console.log(commentDescriptionRef.current.value)
         let data = {
             comment: {
-                name: isLoggedIn ? "User" : commentNameRef.current.value,
+                name: isLoggedIn ? full_name : commentNameRef.current.value,
                 description: commentDescriptionRef.current.value
             }
         }
+        console.log(data)
         createComment(tradeId, data)
     }
     const handleDeleteTrade = () => {
@@ -52,7 +56,7 @@ const Trade = () => {
     }
     useEffect(() => {
         if (isLoggedIn) {
-            getOwnerTrade(authToken, setAuthTokenCb, tradeId, setCheckOwner)
+            Promise.all(getOwnerTrade(authToken, setAuthTokenCb, tradeId, setCheckOwner), getUserData(authToken, setAuthTokenCb, setUserData))
         }
     }, [])
 
@@ -61,7 +65,7 @@ const Trade = () => {
     }, [])
     useEffect(() => {
         getComments(tradeId, setComments)
-    }, [])
+    }, [comments])
 
     return (
         <div className='w-screen h-auto'>
@@ -149,14 +153,13 @@ const Trade = () => {
                     </div>
                 </div>
             </div>
-            <div className='comments w-full h-auto'>
-                <h2>Comments</h2>
+            <div className='comments w-full h-auto border border-slate-700 px-3'>
+                {<h2>{`${comments?.length} Comments`}</h2>}
                 {/* <CommentSection commentsArray={comments} setComment={setComments} /> */}
-                {comments && comments.length !== 0 ? comments.map((comment, index) => <div className='flex flex-col'>
+                {comments && comments.length !== 0 ? comments.map((comment, index) => <div key={comment.id} className='flex flex-col shadow-md p-4 rounded-md items-start gap-x-4'>
                     <h2>{comment.name}</h2>
                     {<p>{comment.description}</p>}
-                    <p>{`${comment.created_at.split("T")[0]} at ${comment.created_at.split("T")[1].slice(0, -8)}`}</p>
-                    <p>Update</p>
+                    <p className='text-gray-400'>{`${comment.created_at.split("T")[0]} at ${comment.created_at.split("T")[1].slice(0, -8)}`}</p>
                 </div>) : <h3>No Comments</h3>}
             </div>
             <form onSubmit={(e) => handleSubmit(e)}>
@@ -166,16 +169,16 @@ const Trade = () => {
                 </div>}
                 <div className='flex'>
                     <label>Description:</label>
-                    <textarea ref={commentDescriptionRef} />
+                    <textarea className='border border-slate-700 resize-none w-[200px]' ref={commentDescriptionRef} />
                 </div>
                 <input type='submit' value='Submit' />
             </form>
-            {checkOwner && <div className='flex gap-1'>
-                <Link to='edit' state={tradeInfo}><button className='p-2 bg-red-300'>Edit Trade</button></Link>
-                <button className='p-2 bg-red-300' onClick={() => handleDeleteTrade()}>Delete Trade</button>
-
+            {checkOwner && <div className=''>
+                <Link to='edit' state={tradeInfo}><Button color={"bg-slate-700"} classnames={"text-white ml-auto"} children={"Edit Trade"} /></Link>
+                <Button children={"Delete Trade"} cb={() => handleDeleteTrade()} classnames={"text-white ml-auto"} color={"bg-slate-700"} />
             </div>}
-            <button onClick={() => back()}>Back</button>
+            <Button color={"bg-slate-700"} classnames={"text-white ml-auto"} children={"Back"} cb={() => back()} />
+            {/* <button onClick={() => back()}>Back</button> */}
         </div>
     )
 }

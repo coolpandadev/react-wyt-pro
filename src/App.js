@@ -33,10 +33,10 @@ function App() {
       <Toaster position='top-center'
         toastOptions={{
           duration: 3000,
-          className: 'p-3',
+          className: 'p-3 font-body uppercase font-thin',
           style: {
-            backgroundColor: 'black',
-            color: 'white'
+            backgroundColor: '#334155',
+            color: 'white',
           },
         }} />
     </SessionContextProvider>
