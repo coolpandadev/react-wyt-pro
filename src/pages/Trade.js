@@ -4,6 +4,7 @@ import { useNavigate, Link, useParams } from 'react-router-dom'
 import { SessionContext } from '../contexts/SessionContext'
 import Button from '../components/Button'
 
+
 const Trade = () => {
     const { isLoggedIn, authToken, setAuthTokenCb, userData, setUserData } = useContext(SessionContext);
     const { full_name } = userData

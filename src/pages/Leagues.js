@@ -49,14 +49,6 @@ const Leagues = () => {
                                     <p className="text-xs">{league?.scoring_type} - {league?.num_teams} Team</p>
                                 </div>
                             </div>
-                            {/* <div>
-                                {Object.entries(league?.roster_positions).map(([position, count]) => (
-                                    <span key={position}>
-                                        {position}: {count} 
-                                    </span>
-                                ))}
-                            </div> */}
-
                         </div>
                     </Link>
 
