@@ -10,13 +10,22 @@
   }
   #root {
     height: 100%;
-    width: 100%
+    width: 100%;
   }
-  p,a,span,li {
+  p,
+  a,
+  span,
+  li,
+  label,
+  input {
     font-family: Miriam Libre;
     text-transform: uppercase;
   }
-  h5,h4,h3,h2,h1 {
+  h5,
+  h4,
+  h3,
+  h2,
+  h1 {
     font-family: Squada One;
     text-transform: uppercase;
   }
@@ -27,7 +36,3 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-/* input:checked + label .player-info {
-  @apply bg-emerald-50
-} */

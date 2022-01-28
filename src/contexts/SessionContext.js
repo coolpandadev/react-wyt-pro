@@ -11,7 +11,7 @@ const SessionContextProvider = ({ children }) => {
     const setLoggedIn = (bool) => {
         setIsLoggedIn(bool)
     }
-
+    const [userData, setUserData] = useState({})
     // Initialize Token States and pull from local storage
     const [authToken, setAuthToken] = useState(localStorage.getItem('authToken') || '');
     const setAuthTokenCb = (token) => {
@@ -32,7 +32,9 @@ const SessionContextProvider = ({ children }) => {
         isLoggedIn,
         setLoggedIn,
         authToken,
-        setAuthTokenCb
+        setAuthTokenCb,
+        userData,
+        setUserData
     }
 
     return (

@@ -1,19 +1,21 @@
 import { useContext, useState, useEffect } from 'react'
 import { SessionContext } from '../contexts/SessionContext'
 import { Navigate, Link } from 'react-router-dom';
-import { getLeagues } from '../utils/Utils';
+import { getLeagues, getUserData } from '../utils/Utils';
 
 
 const Leagues = () => {
 
-    const { isLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
+    const { isLoggedIn, authToken, setAuthTokenCb, setUserData } = useContext(SessionContext);
     // const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
 
     const [leagues, setLeagues] = useState(null)
     const setLeaguesCb = (leagueInfo) => {
         setLeagues(leagueInfo)
     }
-
+    useEffect(() => {
+        getUserData(authToken, setAuthTokenCb, setUserData)
+    }, [])
     useEffect(() => {
         getLeagues(authToken, setAuthTokenCb, setLeaguesCb)
     }, [])
@@ -37,10 +39,10 @@ const Leagues = () => {
                             leagueName: league?.league_name
                         }}
                         className="w-full"
-                        >
+                    >
                         <div className="shadow-md p-4 rounded-md flex flex-col justify-between w-full">
                             <div className="flex gap-x-4 items-center">
-                                <img className="rounded-full w-10 h-10 md-w-20 md-h-20"src={league?.team?.logo_url} />    
+                                <img className="rounded-full w-10 h-10 md-w-20 md-h-20" src={league?.team?.logo_url} />
                                 <div>
                                     <p className="text-xs">{league?.league_name}</p>
                                     <p className="font-header text-md">{league?.team?.team_name}</p>
