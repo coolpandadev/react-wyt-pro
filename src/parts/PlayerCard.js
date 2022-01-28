@@ -1,12 +1,12 @@
 import React from 'react';
 
-const PlayerCard = ({player, index, cb, checkedArr}) => {
+const PlayerCard = ({player, index, type, cb, checkedArr}) => {
   return (
     <div className="flex no-wrap">
         <input
         type="checkbox"
         id={player?.player_key}
-        name="player_to_send"
+        name={type === "send" ? "player_to_send" : "players_to_receive"}
         value={player?.player_key}
         checked={checkedArr[index] || false}
         onChange={() => cb(index)}
@@ -16,7 +16,7 @@ const PlayerCard = ({player, index, cb, checkedArr}) => {
         <label htmlFor={player?.player_key} 
         className="flex flex-col md:w-full gap-x-4 shrink-0 no-wrap group peer-checked:border-emerald-500 border border-transparent peer-checked:bg-emerald-50 p-2 md:p-4 rounded-md"
         > 
-            <div className="flex sticky left-0 gap-x-4 px-2">
+            <div className="flex gap-x-4 px-2">
             <img src={player?.player_image} className="w-6 md-w-16 md-h-16" />
             <div className="flex flex-col justify-center">
                 <p className="text-xs">{player?.player_name}</p>

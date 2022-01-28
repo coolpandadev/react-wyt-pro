@@ -27,7 +27,7 @@ const Trades = () => {
         <div className='px-4 max-w-screen-xl m-auto'>
             <p>{location.state?.leagueName}</p>
             <h2 className="text-4xl">{location.state?.teamName}</h2>
-            <div>
+            <div className="pt-8">
                 {trades ? trades?.map((trade, index) => (
                     <a href={`/trade/${trade?.id}`} key={trade?.id}>
                         <div className="shadow-md p-4 rounded-md flex items-center gap-x-4">
@@ -45,7 +45,7 @@ const Trades = () => {
                     <p>You have no trades at the moment.</p>
                 }
             </div>
-            <div className="fixed bottom-0 left-0 right-0 bg-white px-4 py-2 w-screen">
+            <div className="fixed bottom-0 left-0 right-0 bg-white px-4 py-2 w-screen md-display">
                 <Link
                     to={`/trades/${params?.leagueKey}/new`}
                     state={location?.state}

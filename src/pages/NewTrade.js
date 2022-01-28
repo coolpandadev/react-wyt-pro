@@ -119,7 +119,7 @@ const NewTrade = () => {
   }
 
   return (
-    <div className="flex flex-col px-4 max-w-screen-xl m-auto">
+    <div className="flex flex-col px-4 max-w-screen-xl m-auto pb-20">
       <div className="flex flex-col md:flex-row justify-between">
         <div className="pt-4">
           <p>{location.state?.leagueName}</p>
@@ -141,7 +141,8 @@ const NewTrade = () => {
                 userRoster?.map((player, index) =>
                 <PlayerCard 
                   key={index}
-                  player={player} 
+                  player={player}
+                  type="send" 
                   index={index} 
                   cb={handleUserPlayerSelect} 
                   checkedArr={userCheckedState} 
@@ -154,15 +155,16 @@ const NewTrade = () => {
                   <Link to="/">Back button here</Link>
                 </>
             }
-          </div>
-          {userRoster ?
+        </div>
+          {partner ?
             <div className="flex flex-col gap-y-4 overflow-x-auto mt-8 border-t border-slate-400 md:mt-0 md:w-[46%] md:border-t-0 md:border-l md:pl-4">
-              {partner && <h2 className="text-4xl pt-8 md:mt-0">{partner?.label}</h2>}
+              {partner && <h2 className="text-4xl sticky top-0 left-0 pt-8 md:mt-0">{partner?.label}</h2>}
               {partnerRoster &&
                   partnerRoster?.map((player, index) =>
                   <PlayerCard 
                     key={index}
                     player={player} 
+                    type="receive"
                     index={index} 
                     cb={handlePartnerPlayerSelect} 
                     checkedArr={partnerCheckedState} 
@@ -171,20 +173,16 @@ const NewTrade = () => {
               }
             </div>
             :
-            <>
-              <p>
-                No partner team selected
-              </p>
-            </>
+            <p>
+              No partner team selected
+            </p>
           }
       </div>
-        <div>
-            <StickyButton 
-              cb={handleSubmit}
-              classnames={ (userRoster && partnerRoster && (playersToSend?.length > 0) && (playersToReceive?.length > 0)) ? "bg-emerald-500 text-white" : "bg-slate-200 text-black"}
-              >Create Trade
-            </StickyButton>
-        </div>
+      <StickyButton 
+        cb={handleSubmit}
+        classnames={ (userRoster && partnerRoster && (playersToSend?.length > 0) && (playersToReceive?.length > 0)) ? "bg-emerald-500 text-white" : "bg-slate-200 text-black" }
+        >Create Trade
+      </StickyButton>
     </div>
   );
 };

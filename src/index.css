@@ -21,6 +21,11 @@
     font-family: Miriam Libre;
     text-transform: uppercase;
   }
+  time,
+  textarea {
+    font-family: Miriam Libre; 
+  }
+
   h5,
   h4,
   h3,
