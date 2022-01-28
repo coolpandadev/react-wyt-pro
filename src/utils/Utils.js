@@ -187,7 +187,8 @@ export const getTradeInfo = (tradeId, setTradeInfo) => {
     }
     return axios(config)
         .then((response) => {
-            setTradeInfo(response.data)
+            let newObject = { ...response.data, players_to_send: response.data.players_to_send.filter(player => player.player_name !== "Dropped"), players_to_receive: response.data.players_to_receive.filter(player => player.player_name !== "Dropped") }
+            setTradeInfo(newObject)
             return response
         })
         .catch((error) => {

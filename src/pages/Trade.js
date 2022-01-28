@@ -3,6 +3,8 @@ import { getTradeInfo, getComments, createComment, getOwnerTrade, deleteTrade, g
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import { SessionContext } from '../contexts/SessionContext'
 import Button from '../components/Button'
+import PlayerCard from '../parts/PlayerCard'
+import ReadOnlyPlayerCard from '../parts/ReadOnlyPlayerCard'
 
 const Trade = () => {
     const { isLoggedIn, authToken, setAuthTokenCb, userData, setUserData } = useContext(SessionContext);
@@ -14,6 +16,7 @@ const Trade = () => {
     const [comments, setComments] = useState([]);
     const { tradeId } = useParams();
     const [checkOwner, setCheckOwner] = useState(false);
+    const [cleanTradeData, setCleanData] = useState({ cleanPlayersToSend: [], cleanPlayersToReceive: [] })
     const handleSubmit = (e) => {
         e.preventDefault()
         // console.log(commentNameRef.current.value)
@@ -67,89 +70,69 @@ const Trade = () => {
     }, [comments])
 
     return (
-        <div className='w-screen h-auto'>
-            <h2>Trade</h2>
-            <h2>{`ID: ${tradeInfo?.id}`}</h2>
-            <div className='w-full h-auto flex justify-between'>
-                <div className='UserInfo'>
-                    <h2>{`User's Team Name: ${tradeInfo?.user_team_name}`}</h2>
-                    <h2>{`User's Team Key: ${tradeInfo?.user_team_key}`}</h2>
-                    <div>
-                        <h2>Players to Send</h2>
-                        {tradeInfo?.players_to_send && tradeInfo?.players_to_send.length !== 0 ? tradeInfo?.players_to_send.map((player) =>
-                            <div key={player?.player_key} data-key={player?.player_key}>
-                                <p>{player?.player_name}</p>
-                                <p>{player?.team_abbr}</p>
-                                <p>{player?.player_positions}</p>
-                                <img src={player?.player_image} />
-                                <div className="flex flex-col">
-                                    <div className="flex">
-                                        {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
-                                    </div>
-                                    <div className="flex">
-                                        {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
-                                    </div>
-                                </div>
-                            </div>
-                        ) : <p>No Players</p>}
-                        <h2>Other Rosters</h2>
-                        {tradeInfo?.user_other_rosters && tradeInfo?.user_other_rosters.length !== 0 ? tradeInfo?.user_other_rosters.map((player, index) =>
-                            <div key={player?.player_key} data-key={player?.player_key}>
-                                <p>{player?.player_name}</p>
-                                <p>{player?.team_abbr}</p>
-                                <p>{player?.player_positions}</p>
-                                <img src={player?.player_image} />
-                                <div className="flex flex-col">
-                                    <div className="flex">
-                                        {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
-                                    </div>
-                                    <div className="flex">
-                                        {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
-                                    </div>
-                                </div>
-                            </div>
-                        ) : <p>No Players</p>}
-                    </div>
+        <div className='flex flex-col px-4 max-w-screen-xl m-auto'>
+
+            <div className="pt-4">
+                <p>{tradeInfo?.league_name}</p>
+            </div>
+            <div className="flex flex-col md:flex-row justify-center">
+                <div className="flex flex-col gap-y-4 overflow-x-auto md:w-[46%] md:pr-4">
+                    <h2 className="text-4xl sticky top-0 left-0 pt-8">{tradeInfo?.user_team_name}</h2>
+                    {tradeInfo.players_to_send ?
+                        tradeInfo.players_to_send?.map((player, index) =>
+                            <ReadOnlyPlayerCard
+                                key={index}
+                                player={player}
+                                active={true}
+                            />
+                        )
+                        : <>
+                            <p>
+                                NO PLAYER DATA
+                            </p>
+                            <Link to="/">Back button here</Link>
+                        </>
+                    }
+                    {tradeInfo.user_other_rosters ?
+                        tradeInfo.user_other_rosters?.map((player, index) =>
+                            <ReadOnlyPlayerCard
+                                key={index}
+                                player={player}
+                                active={false}
+                            />
+                        )
+                        : null
+                    }
                 </div>
-                <div className='OtherInfo'>
-                    <h2>{`Trader's Team Name: ${tradeInfo?.totrade_team_name}`}</h2>
-                    <h2>{`Trader's Team Key: ${tradeInfo?.totrade_team_key}`}</h2>
-                    <div>
-                        <h2>Players to Receive</h2>
-                        {tradeInfo?.players_to_receive && tradeInfo?.players_to_receive.length !== 0 ? tradeInfo?.players_to_receive.map((player, index) =>
-                            <div key={player?.player_key} data-key={player?.player_key}>
-                                <p>{player?.player_name}</p>
-                                <p>{player?.team_abbr}</p>
-                                <p>{player?.player_positions}</p>
-                                <img src={player?.player_image} />
-                                <div className="flex flex-col">
-                                    <div className="flex">
-                                        {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
-                                    </div>
-                                    <div className="flex">
-                                        {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
-                                    </div>
-                                </div>
-                            </div>
-                        ) : <p>No Players</p>}
-                        <h2>Other Rosters</h2>
-                        {tradeInfo?.totrade_other_rosters && tradeInfo?.totrade_other_rosters.length !== 0 ? tradeInfo?.totrade_other_rosters.map((player, index) =>
-                            <div key={player?.player_key} data-key={player?.player_key}>
-                                <p>{player?.player_name}</p>
-                                <p>{player?.team_abbr}</p>
-                                <p>{player?.player_positions}</p>
-                                <img src={player?.player_image} />
-                                <div className="flex flex-col">
-                                    <div className="flex">
-                                        {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
-                                    </div>
-                                    <div className="flex">
-                                        {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
-                                    </div>
-                                </div>
-                            </div>
-                        ) : <p>No Players</p>}
-                    </div>
+            </div>
+            <div className="flex flex-col md:flex-row justify-center">
+                <div className="flex flex-col gap-y-4 overflow-x-auto md:w-[46%] md:pr-4">
+                    <h2 className="text-4xl sticky top-0 left-0 pt-8">{tradeInfo?.totrade_team_name}</h2>
+                    {tradeInfo.players_to_receive ?
+                        tradeInfo.players_to_receive?.map((player, index) =>
+                            <ReadOnlyPlayerCard
+                                key={index}
+                                player={player}
+                                active={true}
+                            />
+                        )
+                        : <>
+                            <p>
+                                NO PLAYER DATA
+                            </p>
+                            <Link to="/">Back button here</Link>
+                        </>
+                    }
+                    {tradeInfo.totrade_other_rosters ?
+                        tradeInfo.totrade_other_rosters?.map((player, index) =>
+                            <ReadOnlyPlayerCard
+                                key={index}
+                                player={player}
+                                active={false}
+                            />
+                        )
+                        : null
+                    }
                 </div>
             </div>
             <div className='comments w-full h-auto border border-slate-700 px-3'>
