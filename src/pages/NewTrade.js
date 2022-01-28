@@ -5,6 +5,8 @@ import { getRosterInfo } from '../utils/Utils';
 import { getLeagueTeams } from '../utils/Utils';
 import { createTrade } from '../utils/Utils';
 import Select from 'react-select';
+import PlayerCard from '../parts/PlayerCard';
+import StickyButton from '../parts/StickyButton';
 
 const NewTrade = () => {
   const location = useLocation()
@@ -116,118 +118,76 @@ const NewTrade = () => {
     return <Navigate to="/" />;
   }
 
-
   return (
-    <>
-      <div>
-        <p>{params?.leagueKey}</p>
-        <p>{location.state.teamName}</p>
+    <div className="flex flex-col px-4 max-w-screen-xl m-auto">
+      <div className="flex flex-col md:flex-row justify-between">
+        <div className="pt-4">
+          <p>{location.state?.leagueName}</p>
+        </div>
+        <div className="pt-4"> 
+          < Select
+            onChange={setPartner}
+            options={partnerOptions}
+            placeholder="Select Team"
+            defaultValue=""
+          >
+          </Select >
+        </div>
       </div>
-      <div>
-        {
-          userRoster ?
-            userRoster?.map((player, index) =>
-              <div key={player?.player_key}>
-                <input
-                  type="checkbox"
-                  id="player_to_send"
-                  name="player_to_send"
-                  value={player?.player_key}
-                  checked={userCheckedState[index] || false}
-                  onChange={() => handleUserPlayerSelect(index)}
+      <div className="flex flex-col md:flex-row justify-center">
+        <div className="flex flex-col gap-y-4 overflow-x-auto md:w-[46%] md:pr-4">
+          <h2 className="text-4xl sticky top-0 left-0 pt-8">{location.state?.teamName}</h2>
+            {userRoster ?
+                userRoster?.map((player, index) =>
+                <PlayerCard 
+                  key={index}
+                  player={player} 
+                  index={index} 
+                  cb={handleUserPlayerSelect} 
+                  checkedArr={userCheckedState} 
                 />
-                <p>{player?.player_name}</p>
-                <p>{player?.team_abbr}</p>
-                <p>{player?.player_positions}</p>
-                <img src={player?.player_image} />
-                <div className="flex flex-col">
-                  <div className="flex">
-                    {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
-                  </div>
-                  <div className="flex">
-                    {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
-                  </div>
-                </div>
-              </div>
-            )
-            : <>
-              <p>
-                This league is currently inactive
-              </p>
-              <Link to="/">Back button here</Link>
-            </>
-        }
-      </div>
-      {userRoster ?
-        <>
-          <div>
-            <label htmlFor="role">Choose a team to trade with:</label>
-            {/* < select
-              onChange={e => handleTeamChange(e)}
-              className="browser-default custom-select" 
-              defaultValue={partner?.team_name}
-              >
-              {
-                  leagueTeams?.map((team) => 
-                    <option 
-                    key={team?.team_key} 
-                    value={team?.team_key} 
-                    data-name={team?.team_name}
-                    data-managers={Object.values(team?.manager).join(" & ")}
-                    >
-                      {team?.team_name}
-                    </option>)
-              }
-          </select > */}
-
-            < Select
-              onChange={setPartner}
-              options={partnerOptions}
-              placeholder="Select Team"
-              defaultValue=""
-            >
-            </Select >
+                )
+                : <>
+                  <p>
+                    This league is currently inactive
+                  </p>
+                  <Link to="/">Back button here</Link>
+                </>
+            }
           </div>
-          {
-            partnerRoster ?
-              partnerRoster?.map((player, index) =>
-                <div key={player?.player_key}>
-                  <input
-                    type="checkbox"
-                    id="player_to_receive"
-                    name="player_to_receive"
-                    value={player?.player_key}
-                    checked={partnerCheckedState[index] || false}
-                    onChange={() => handlePartnerPlayerSelect(index)}
+          {userRoster ?
+            <div className="flex flex-col gap-y-4 overflow-x-auto mt-8 border-t border-slate-400 md:mt-0 md:w-[46%] md:border-l md:pl-4">
+              {partner && <h2 className="text-4xl pt-8 md:mt-0">{partner?.label}</h2>}
+              {
+                partnerRoster ?
+                  partnerRoster?.map((player, index) =>
+                  <PlayerCard 
+                    key={index}
+                    player={player} 
+                    index={index} 
+                    cb={handlePartnerPlayerSelect} 
+                    checkedArr={partnerCheckedState} 
                   />
-                  <p>{player?.player_name}</p>
-                  <p>{player?.team_abbr}</p>
-                  <p>{player?.player_positions}</p>
-                  <img src={player?.player_image} />
-                  <div className="flex flex-col">
-                    <div className="flex">
-                      {Object.keys(player?.stats).map((category, index) => <div key={index}><p>{category}</p></div>)}
-                    </div>
-                    <div className="flex">
-                      {Object.values(player?.stats).map((value, index) => <div key={index}><p>{value}</p></div>)}
-                    </div>
-                  </div>
-                </div>
-              )
-              : <>
-                <p>
-                  No partner team selected
-                </p>
-              </>
+                  )
+                  : <>
+                    <p>
+                      No partner team selected
+                    </p>
+                  </>
+              }
+            </div>
+            :
+            null
           }
-        </>
-        :
-        null
-      }
-      <div>
-        {userRoster && partnerRoster && (playersToSend?.length > 0) && (playersToReceive?.length > 0) && <button onClick={() => handleSubmit()}>Create Trade</button>}
       </div>
-    </>
+        <div>
+            <StickyButton 
+              cb={handleSubmit}
+              classnames={ (userRoster && partnerRoster && (playersToSend?.length > 0) && (playersToReceive?.length > 0)) ? "bg-emerald-500 text-white" : "bg-slate-200 text-black"}
+              >Create Trade
+            </StickyButton>
+        </div>
+    </div>
   );
 };
 

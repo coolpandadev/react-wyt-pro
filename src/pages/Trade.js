@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState, useContext } from 'react'
 import { getTradeInfo, getComments, createComment, getOwnerTrade, deleteTrade } from '../utils/Utils'
 import { useNavigate, Link, useParams } from 'react-router-dom'
 import { SessionContext } from '../contexts/SessionContext'
-import { CommentSection } from 'react-comments-section'
 
 const Trade = () => {
     const { isLoggedIn, authToken, setAuthTokenCb } = useContext(SessionContext);
@@ -152,13 +151,13 @@ const Trade = () => {
             </div>
             <div className='comments w-full h-auto'>
                 <h2>Comments</h2>
-                <CommentSection commentsArray={comments} setComment={setComments} />
-                {/* {comments && comments.length !== 0 ? comments.map((comment, index) => <div className='flex flex-col'>
+                {/* <CommentSection commentsArray={comments} setComment={setComments} /> */}
+                {comments && comments.length !== 0 ? comments.map((comment, index) => <div className='flex flex-col'>
                     <h2>{comment.name}</h2>
                     {<p>{comment.description}</p>}
                     <p>{`${comment.created_at.split("T")[0]} at ${comment.created_at.split("T")[1].slice(0, -8)}`}</p>
                     <p>Update</p>
-                </div>) : <h3>No Comments</h3>} */}
+                </div>) : <h3>No Comments</h3>}
             </div>
             <form onSubmit={(e) => handleSubmit(e)}>
                 {!(isLoggedIn) && <div className='flex'>

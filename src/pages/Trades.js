@@ -11,13 +11,11 @@ const Trades = () => {
     // const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
     const [trades, setTrades] = useState(null)
     const params = useParams();
-    console.log("Trades go first")
     const setTradesCb = (tradeList) => {
         setTrades(tradeList)
     }
 
     useEffect(() => {
-        console.log(`Token: ${authToken}`)
         getTrades(authToken, setAuthTokenCb, params?.leagueKey, setTradesCb, navigate)
     }, [location.pathname])
 
@@ -52,7 +50,7 @@ const Trades = () => {
                     to={`/trades/${params?.leagueKey}/new`}
                     state={location?.state}
                     className="rounded-md py-2 px-4 m-auto w-full inline-flex justify-center items-center bg-emerald-500 text-white font-header text-lg"
-                >Create Trade</Link>
+                >New Trade</Link>
             </div>
 
         </div>

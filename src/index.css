@@ -7,7 +7,6 @@
   body {
     height: 100%;
     min-height: 100%;
-    width: 100vw
   }
   #root {
     height: 100%;
@@ -28,3 +27,7 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+/* input:checked + label .player-info {
+  @apply bg-emerald-50
+} */
