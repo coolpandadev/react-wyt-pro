@@ -22,7 +22,7 @@ const NavBar = () => {
             { isLoggedIn ? 
                 <Button cb={()=>handleClick()} color="bg-slate-700" classnames="text-white ml-auto">Logout</Button>
             :
-                <li className="ml-auto">
+                <li className="ml-auto flex items-center">
                     <LinkButton 
                         url="https://wyt-rails.herokuapp.com/auth/yahoo_auth" 
                         color="bg-emerald-500" 

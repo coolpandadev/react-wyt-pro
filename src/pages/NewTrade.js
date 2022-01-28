@@ -125,19 +125,19 @@ const NewTrade = () => {
           <p>{location.state?.leagueName}</p>
         </div>
         <div className="pt-4"> 
-          < Select
+          {userRoster.length > 0 && <Select
             onChange={setPartner}
             options={partnerOptions}
             placeholder="Select Team"
             defaultValue=""
           >
-          </Select >
+          </Select>}
         </div>
       </div>
       <div className="flex flex-col md:flex-row justify-center">
         <div className="flex flex-col gap-y-4 overflow-x-auto md:w-[46%] md:pr-4">
           <h2 className="text-4xl sticky top-0 left-0 pt-8">{location.state?.teamName}</h2>
-            {userRoster ?
+            {userRoster.length > 0 ?
                 userRoster?.map((player, index) =>
                 <PlayerCard 
                   key={index}
@@ -148,15 +148,13 @@ const NewTrade = () => {
                   checkedArr={userCheckedState} 
                 />
                 )
-                : <>
+                :
                   <p>
                     This league is currently inactive
                   </p>
-                  <Link to="/">Back button here</Link>
-                </>
             }
         </div>
-          {partner ?
+          {userRoster &&
             <div className="flex flex-col gap-y-4 overflow-x-auto mt-8 border-t border-slate-400 md:mt-0 md:w-[46%] md:border-t-0 md:border-l md:pl-4">
               {partner && <h2 className="text-4xl sticky top-0 left-0 pt-8 md:mt-0">{partner?.label}</h2>}
               {partnerRoster &&
@@ -172,15 +170,12 @@ const NewTrade = () => {
                   )
               }
             </div>
-            :
-            <p>
-              No partner team selected
-            </p>
           }
       </div>
       <StickyButton 
         cb={handleSubmit}
         classnames={ (userRoster && partnerRoster && (playersToSend?.length > 0) && (playersToReceive?.length > 0)) ? "bg-emerald-500 text-white" : "bg-slate-200 text-black" }
+        disabled={ (userRoster && partnerRoster && (playersToSend?.length > 0) && (playersToReceive?.length > 0)) ? false: true}
         >Create Trade
       </StickyButton>
     </div>
