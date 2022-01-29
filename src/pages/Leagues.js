@@ -14,7 +14,7 @@ const Leagues = () => {
         setLeagues(leagueInfo)
     }
     useEffect(() => {
-        getUserData(authToken, setAuthTokenCb, setUserData)
+        getUserData(authToken, setUserData)
     }, [])
     useEffect(() => {
         getLeagues(authToken, setAuthTokenCb, setLeaguesCb)
