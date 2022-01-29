@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 
 
 export const userLogout = (authToken, setAuthToken, setLoggedIn) => {
-    console.log(authToken)
     var config = {
         method: 'DELETE',
         url: `https://wyt-rails.herokuapp.com/auth/yahoo_auth/logout`,
