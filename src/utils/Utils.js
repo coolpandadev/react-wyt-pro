@@ -57,7 +57,7 @@ export const useTokenUpdater = (oldToken, newToken, setAuthToken) => {
 }
 
 
-export const getUserData = (token, setAuthToken, setUserData) => {
+export const getUserData = (token, setUserData) => {
     var config = {
         method: 'GET',
         url: 'https://wyt-rails.herokuapp.com/user',
@@ -67,7 +67,6 @@ export const getUserData = (token, setAuthToken, setUserData) => {
     }
     return axios(config).then(response => {
         setUserData(response.data)
-        useTokenUpdater(token, response.headers['authorization'], setAuthToken)
     })
 }
 
@@ -261,7 +260,6 @@ export const updateTrade = (token, setAuthToken, tradeId, data) => {
         data
     }
     return axios(config).then(response => {
-        console.log(response)
         toast.success(response.data.message)
         useTokenUpdater(token, response.headers['authorization'], setAuthToken)
     }).catch(error => {
@@ -270,7 +268,7 @@ export const updateTrade = (token, setAuthToken, tradeId, data) => {
     })
 }
 
-export const getOwnerTrade = (token, setAuthToken, tradeId, setCheckOwner) => {
+export const getOwnerTrade = (token, tradeId, setCheckOwner) => {
     var config = {
         method: 'GET',
         url: `https://wyt-rails.herokuapp.com/api/trades/${tradeId}/owner`,
@@ -279,9 +277,7 @@ export const getOwnerTrade = (token, setAuthToken, tradeId, setCheckOwner) => {
         }
     }
     return axios(config).then(response => {
-        console.log(response)
         setCheckOwner(response.data.message === "true")
-        useTokenUpdater(token, response.headers['authorization'], setAuthToken)
     }).catch(error => {
         errorToast(error.response.data)
     })

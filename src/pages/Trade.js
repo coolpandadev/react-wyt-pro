@@ -65,8 +65,8 @@ const Trade = () => {
 
     useEffect(() => {
         if (isLoggedIn) {
-            getOwnerTrade(authToken, setAuthTokenCb, tradeId, setCheckOwner)
-            getUserData(authToken, setAuthTokenCb, setUserData)
+            getOwnerTrade(authToken, tradeId, setCheckOwner)
+            getUserData(authToken, setUserData)
         }
     }, [])
 
@@ -152,7 +152,7 @@ const Trade = () => {
             <div className="comments w-full h-auto pt-8 mb-8">
                 {<h2 className="text-2xl">{`Comments (${comments?.length})`}</h2>}
                 <hr className="py-1" />
-                {comments && comments?.length !== 0 ? comments.map((comment) => <div key={comment?.id} className="flex flex-col py-2 items-start gap-x-4 border-b border-slate-200">
+                {comments && comments?.length !== 0 ? comments?.map((comment) => <div key={comment?.id} className="flex flex-col py-2 items-start gap-x-4 border-b border-slate-200">
                     <div className="flex justify-between w-full items-center">
                         <h2>{comment?.name}</h2>
                         <LastSeen date={comment?.created_at} classnames="text-xs text-slate-500 ml-auto" />
