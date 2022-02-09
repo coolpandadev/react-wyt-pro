@@ -8,7 +8,9 @@
 React-based Mobile Responsive front-end app for the 'What You Think?' Yahoo Fantasy Basketball Trade Tool Opinion Aggregator app.
 **To access the backend repository, please click this [link](https://github.com/stanley-tarce/wyt-rails)**
 ## Important!
-*To access the app, you must have a Yahoo account currently playing in the NBA Fantasy (specifically within a League with an Active Roster). We use real data to create and compare stats of the players. Alternative solution would be clicking the following links:*
+*To access the full-functionality of the app, you must have a Yahoo account currently playing in the NBA Fantasy (specifically within a League with an Active Roster). We use real data to create and compare stats of the players. 
+
+Otherwise, you may click on the below Trade Links to see how a guest user will view and use the shareable trade link:*
 
  
 ### Live/Demo
@@ -32,12 +34,13 @@ Please use this [link](https://wyt-react.vercel.app/) to access the app
  - On the show trade proposal page, user should see a list of comments from other users.
  - On the show trade proposal page, any user can fill out the comment form with their name and comment on the trade
 
-### Technologies used
+### Libraries and modules used
 To create the frontend app, we used the following frameworks:
- 1. React
- 2. Material UI
+ 1. Create React App
+ 2. Tailwind CSS
  3. React Router
- 4. React Hot Toast
+ 4. React Select
+ 5. React Hot Toast
 
 ### Snapshots 
 <p align="center">
