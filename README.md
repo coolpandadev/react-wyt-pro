@@ -6,6 +6,9 @@
 # WYT React
 
 React-based Mobile Responsive front-end app for the 'What You Think?' Yahoo Fantasy Basketball Trade Tool Opinion Aggregator app.
+
+This Web App aims to make it easier for Yahoo! Fantasy Basketball managers to ask for opinions from friends about trades they're looking to make. By creating a shareable link where guest users can comment, WYT retools the old process of forum shopping. Fantasy Basketball managers no longer need to take individual screenshots then send via a messaging app nor post incomplete information on Reddit threads.
+
 **To access the backend repository, please click this [link](https://github.com/stanley-tarce/wyt-rails)**
 ## Important!
 *To access the full-functionality of the app, you must have a Yahoo account currently playing in the NBA Fantasy (specifically within a League with an Active Roster). We use real data to create and compare stats of the players. 
