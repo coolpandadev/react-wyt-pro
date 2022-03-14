@@ -50,14 +50,14 @@ const NewTrade = () => {
 
   const handleUserPlayerSelect = (selectedIndex) => {
     // let updatedUserCheckedState = userCheckedState.map((bool, stateIndex) => stateIndex === selectedIndex ? !bool : bool)
-    let updatedUserCheckedState = userCheckedState
+    let updatedUserCheckedState = [...userCheckedState]
     updatedUserCheckedState[selectedIndex] = !userCheckedState[selectedIndex]
     setUserCheckedState(updatedUserCheckedState)
   }
 
   const handlePartnerPlayerSelect = (selectedIndex) => {
     // let updatedPartnerCheckedState = partnerCheckedState.map((bool, stateIndex) => stateIndex === selectedIndex ? !bool : bool)
-    let updatedPartnerCheckedState = partnerCheckedState
+    let updatedPartnerCheckedState = [...partnerCheckedState]
     updatedPartnerCheckedState[selectedIndex] = !updatedPartnerCheckedState[selectedIndex]
     setPartnerCheckedState(updatedPartnerCheckedState)
   }
